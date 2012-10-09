@@ -23,8 +23,10 @@
 
 #include <QObject>
 #include <QNetworkReply>
+#include <QNetworkProxyFactory>
 #include <QCoreApplication>
 #include <QStringList>
+#include "dialogs/logindialog.h"
 
 class UpdateApp : public QObject
 {
@@ -39,8 +41,10 @@ private:
 
 signals:
     void updateState(bool, QString, QString);
+
 public slots:
     void gotWWW(QNetworkReply *);
+    void proxyAuthenticationRequired ( const QNetworkProxy & proxy, QAuthenticator * authenticator );
 };
 
 #endif // UPDATEAPP_H

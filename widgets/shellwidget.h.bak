@@ -31,7 +31,6 @@ public:
     ~ShellWidget();
     void setProcessPath(QString processPath);
     QString getProcessPath();
-    void setTabPosition(int pos){tabPosition = pos;}
 
 protected:
     void keyPressEvent(QKeyEvent *e);
@@ -39,7 +38,6 @@ protected:
 private:
     int insertedChars;
     int cursorPosition;
-    int tabPosition;
     QString command;
     QProcess process;
     QString processPath;
@@ -54,11 +52,8 @@ private:
 
 signals:
     void returnPressed(QString command);
-    void closed(int);
-    void alert(int);
 
 private slots:
-    void processFinished(int,QProcess::ExitStatus);
     void readFromProcess();
     void executeCommand(QString command);
 };

@@ -49,6 +49,7 @@
 #include "../widgets/recoverywidget.h"
 #include "../classes/animation.h"
 #include "../widgets/fastbootwidget.h"
+#include "../widgets/shelltabwidget.h"
 #include "registerdialog.h"
 
 using namespace std;
@@ -104,7 +105,7 @@ private:
 //widgets
     SettingsWidget *settingsWidget;
     FileWidget *fileWidget;
-    ShellWidget *shellWidget;
+    ShellTabWidget *shellTabWidget;
     ScreenshotWidget *screenshotWidget;
     PhoneInfoWidget *phoneInfoWidget;
     MessageWidget *messageWidget;
@@ -132,7 +133,7 @@ private:
     QList<Action> akcje;
     QToolButton * buttonPageInfo;
     QAction * actionPageInfo;
-
+    bool shownAutomatically;
     bool verifyKey(QString email,QString key);
     bool verifyRegistered(QString email);
 
@@ -141,7 +142,7 @@ public slots:
     void refreshState();
 
 private slots:
-
+    void showMainWindow();
     void phoneConnectionChanged(int);
     //apps
 
@@ -189,6 +190,8 @@ private slots:
 
     void donateMessage();
     void on_actionEnter_register_key_triggered();
+signals:
+    void animationFinished(QWidget *);
 };
 
 #endif // MAINWINDOW_H

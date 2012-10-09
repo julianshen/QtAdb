@@ -265,7 +265,6 @@ void ShellWidget::executeCommand(QString command)
     {
         this->process.write(command.toLatin1()+"\n");
     }
-
     this->commandHistory.prepend(command);
 }
 

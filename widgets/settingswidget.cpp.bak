@@ -718,7 +718,7 @@ void SettingsWidget::changeFont()
         {
             widget->setFont(this->fontTables);
         }
-        else if (className == "QTextBrowser" || className == "QTextEdit" || className == "ShellWidget" || className == "ShellTabWidget")
+        else if (className == "QTextBrowser" || className == "QTextEdit" || className == "ShellWidget")
         {
             widget->setFont(this->fontShell);
         }

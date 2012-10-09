@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
     this->recoveryWidget = NULL;
     this->fastbootWidget = NULL;
     this->logcatDialog = NULL;
-
+    this->shownAutomatically = false;
 
     this->systemTray=new QSystemTrayIcon();
     this->systemTray->setIcon(QIcon(":/icons/android.png"));
@@ -404,6 +404,10 @@ void MainWindow::phoneConnectionChanged(int state)
 //        connect(this->ui->buttonPhoneInfo, SIGNAL(clicked()), this, SLOT(showPageDisconnected()));
 //        disconnect(this->ui->buttonPhoneInfo, SIGNAL(clicked()), this, SLOT(showPagePhoneInfo()));
         this->disableActions(Action::Disconnected);
+        if (this->shownAutomatically)
+        {
+            this->hide();
+        }
     }
     else if (state == DEVICE)
     {
@@ -428,6 +432,11 @@ void MainWindow::phoneConnectionChanged(int state)
         this->disableActions(Action::Device);
 
         this->showPageFiles();
+        if (this->isVisible() == false)
+        {
+            this->showMainWindow();
+            this->shownAutomatically = true;
+        }
     }
     else if (state == RECOVERY)
     {
@@ -445,6 +454,11 @@ void MainWindow::phoneConnectionChanged(int state)
 
         this->disableActions(Action::Recovery);
         this->showPageRecovery();
+        if (this->isVisible() == false)
+        {
+            this->showMainWindow();
+            this->shownAutomatically = true;
+        }
     }
     else if (state == FASTBOOT)
     {
@@ -455,7 +469,11 @@ void MainWindow::phoneConnectionChanged(int state)
 
         this->disableActions(Action::Fastboot);
         this->showPageFastboot();
-
+        if (this->isVisible() == false)
+        {
+            this->showMainWindow();
+            this->shownAutomatically = true;
+        }
 //        connect(this->ui->buttonPhoneInfo, SIGNAL(clicked()), this, SLOT(showPageDisconnected()));
 //        disconnect(this->ui->buttonPhoneInfo, SIGNAL(clicked()), this, SLOT(showPagePhoneInfo()));
     }
@@ -811,17 +829,20 @@ void MainWindow::showPageSettings()
 
 void MainWindow::showPageShell()
 {
-    if (this->shellWidget == NULL)
+    if (this->shellTabWidget == NULL)
     {
-        this->shellWidget = new ShellWidget;
-        this->settingsWidget->changeFont();
-        ui->stackedWidget->addWidget(this->shellWidget);
-        this->shellWidget->move(-ui->stackedWidget->currentWidget()->width(),0);
+        this->shellTabWidget = new ShellTabWidget;
+
+        ui->stackedWidget->addWidget(this->shellTabWidget);
+        this->shellTabWidget->move(this->ui->stackedWidget->currentWidget()->width(),0);
+        connect(this,SIGNAL(animationFinished(QWidget*)),this->shellTabWidget,SLOT(uiUpdated(QWidget*)));
     }
 
+
+this->settingsWidget->changeFont();
     this->setButtonDown(7);
 
-    this->startAnimation(this->shellWidget);
+    this->startAnimation(this->shellTabWidget);
 }
 
 void MainWindow::smsReceived(QString number, QString body)
@@ -836,6 +857,15 @@ void MainWindow::smsResult(QString result)
 
 void MainWindow::startAnimation(QWidget *target)
 {
+    if (this->isVisible() == false)
+    {
+        this->currentWidget = target;
+        ui->stackedWidget->setCurrentWidget(this->currentWidget);
+        this->currentWidget->setFocus();
+        emit animationFinished(this->currentWidget);
+        return;
+    }
+
     QWidget *current=this->currentWidget;
     if (this->settingsWidget->enableAnimations)
         this->animation.setPrameters(this->settingsWidget->animationDuration,this->settingsWidget->animationDirection,this->settingsWidget->animationCurve);
@@ -858,8 +888,10 @@ void MainWindow::systemTrayActivated(QSystemTrayIcon::ActivationReason activatio
     case QSystemTrayIcon::Trigger: //left click
         if (this->isVisible())
             this->hide();
-        else
-            this->show();
+        else{
+            this->showMainWindow();
+            this->shownAutomatically = false;
+        }
         break;
     case QSystemTrayIcon::MiddleClick:
         break;
@@ -870,6 +902,8 @@ void MainWindow::animationFinished()
 {
 //    ui->stackedWidget->currentWidget()->move(ui->stackedWidget->currentWidget()->width(),0);
     ui->stackedWidget->setCurrentWidget(this->currentWidget);
+    this->currentWidget->setFocus();
+    emit animationFinished(this->currentWidget);
 }
 
 
@@ -1067,4 +1101,12 @@ void MainWindow::on_actionEnter_register_key_triggered()
 {
     RegisterDialog *registerDialog = new RegisterDialog(this,Phone::getGoogleAccounts());
     registerDialog->exec();
+}
+
+void MainWindow::showMainWindow()
+{
+    this->show();
+    this->setWindowState(this->windowState() & (~Qt::WindowMinimized | Qt::WindowActive));
+    this->setFocus();
+    this->activateWindow();
 }

@@ -19,14 +19,27 @@
 
 
 #include "updateapp.h"
+#include <QMessageBox>
+#include <QAuthenticator>
 
 UpdateApp::UpdateApp(QObject *parent) :
     QObject(parent)
 {
+    QNetworkProxyFactory::setUseSystemConfiguration(true);
+    QNetworkProxyQuery npq(QUrl("http://qtadb.wordpress.com/download/"));
+    QList<QNetworkProxy> proxies = QNetworkProxyFactory::systemProxyForQuery(npq);
+
     this->updateMan = new QNetworkAccessManager(this);
+
+    if (proxies.count() > 0)
+    {
+        this->updateMan->setProxy(proxies[0]);
+    }
     this->reply = NULL;
 
+
     connect(this->updateMan, SIGNAL(finished(QNetworkReply*)), this, SLOT(gotWWW(QNetworkReply*)));
+    connect(this->updateMan, SIGNAL(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)), this,SLOT(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)));
 }
 
 void UpdateApp::gotWWW(QNetworkReply * pReply)
@@ -67,11 +80,29 @@ void UpdateApp::gotWWW(QNetworkReply * pReply)
     }
     else
     {
-        emit this->updateState(false, "failed", "failed");
+        QString errorNumber;
+        //errorNumber << pReply->error();
+        emit this->updateState(false, "failed", errorNumber);
     }
+}
+
+void UpdateApp::proxyAuthenticationRequired ( const QNetworkProxy & proxy, QAuthenticator * authenticator )
+{
+    LoginDialog * login = new LoginDialog();
+
+    login->setMessage(proxy.hostName());
+
+    if (login->exec() == LoginDialog::Accepted)
+    {
+        authenticator->setPassword(login->password());
+
+        authenticator->setUser(login->user());
+    }
+
+    delete login;
 }
 
 void UpdateApp::checkUpdates()
 {
-    this->reply = this->updateMan->get(QNetworkRequest(QUrl("http://qtadb.com/wordpress/download")));
+    this->reply = this->updateMan->get(QNetworkRequest(QUrl("http://qtadb.wordpress.com/download/")));
 }
