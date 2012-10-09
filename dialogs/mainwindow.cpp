@@ -43,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
 //    this->fileWidget->settings = this->settingsWidget;
     win7.init(this->winId());
 
-    this->shellWidget = NULL;
+    this->shellTabWidget = NULL;
     this->screenshotWidget = NULL;
     this->phoneInfoWidget = NULL;
     this->messageWidget = NULL;
