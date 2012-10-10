@@ -11,3 +11,4 @@
 * Integrate ADB source code?
 * Auto scroll down with updates to the screen.
 * Mimimise to tray & display bubble to disable behaviour.
+* http://code.google.com/p/microbridge/source/browse/trunk/src/arduino/
