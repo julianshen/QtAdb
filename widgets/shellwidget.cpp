@@ -68,11 +68,20 @@ ShellWidget::~ShellWidget()
 
 void ShellWidget::keyPressEvent(QKeyEvent *e)
 {
+    if (this->isReadOnly())
+    {
+        return;
+    }
     if (e->modifiers() == Qt::ControlModifier)
     {
         if (e->key() == Qt::Key_C)
         {
             this->process.write(QString(QChar(0x3)).toAscii());
+        }
+        if (e->key() == Qt::Key_D)
+        {
+            this->process.write(QString(QChar(0x3)).toAscii());
+            this->process.write("exit\n");
         }
         else if (e->key() == Qt::Key_Left)
         {
@@ -393,6 +402,9 @@ void ShellWidget::processFinished(int exitcode,QProcess::ExitStatus status)
     case QProcess::CrashExit:
         this->setTextColor(Qt::red);
         this->append(QString("\r\nShell exited abnormally with code ")+exitcode);
-}
+    }
+
+    this->setReadOnly(true);
+
     emit alert(tabPosition);
 }

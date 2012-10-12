@@ -47,6 +47,7 @@ void ShellTabWidget::tabAlert(int tab)
     {
         ui->tabWidget->setTabText(tab,"*Shell*");
     }
+    ui->tabWidget->setTabEnabled(tab,((ShellWidget*)ui->tabWidget->widget(tab))->isReadOnly() == false);
 }
 
 void ShellTabWidget::tabChanged(int tab)
