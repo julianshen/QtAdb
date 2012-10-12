@@ -51,7 +51,8 @@ private:
     QStringList commandHistory;
     QStringList commands;
     int commandHistoryPosition;
-
+    bool stopped;
+    QString oldToolTip;
 signals:
     void returnPressed(QString command);
     void closed(int);

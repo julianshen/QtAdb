@@ -40,6 +40,7 @@ ShellWidget::ShellWidget(QWidget *parent) :
     this->setCursorWidth(3);
     this->setTextCursor(cursor);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
+    this->stopped = false;
 
     QSettings settings;
     this->sdk=settings.value("sdkPath").toString();
@@ -82,6 +83,20 @@ void ShellWidget::keyPressEvent(QKeyEvent *e)
         {
             this->process.write(QString(QChar(0x3)).toAscii());
             this->process.write("exit\n");
+        }
+        if (e->key() == Qt::Key_S)
+        {
+            this->stopped = true;
+            this->oldToolTip = this->toolTip();
+            this->setToolTip("Shell output stopped.  Press Ctrl + q to resume.");
+            this->setFocus();
+        }
+        if (e->key() == Qt::Key_Q)
+        {
+            this->stopped = false;
+            this->setToolTip(oldToolTip);
+            this->readFromProcess();
+            this->setFocus();
         }
         else if (e->key() == Qt::Key_Left)
         {
@@ -280,6 +295,8 @@ void ShellWidget::executeCommand(QString command)
 
 void ShellWidget::readFromProcess()
 {
+    if (this->stopped)
+        return;
     QString tmp = QString::fromUtf8(this->process.readAll());
     QStringList tmp2;
     QString print;
@@ -386,6 +403,7 @@ void ShellWidget::readFromProcess()
     }
     this->ensureCursorVisible();
 
+    this->verticalScrollBar()->setValue(this->verticalScrollBar()->maximum());
     emit alert(tabPosition);
     //qDebug()<<"readShell() - "<<tmp;
 }
