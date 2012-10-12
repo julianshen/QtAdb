@@ -12,5 +12,6 @@
 * Auto scroll down with updates to the screen.
 * Mimimise to tray & display bubble to disable behaviour.
 * http://code.google.com/p/microbridge/source/browse/trunk/src/arduino/
-* Fix Shell output when changing caret position
+* Fix Shell output when changing caret position (maybe use http://sourceforge.net/projects/qconsole/? / http://qtermwidget.sourceforge.net/)
 * Fix shell colour output.
+* Hide screen when minimising.
