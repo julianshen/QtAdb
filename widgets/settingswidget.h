@@ -61,6 +61,7 @@ public:
     bool getQR;
     bool getCyrketVer;
     bool showCopyConfirmation;
+    bool hideAutomatically;
 
     QString phonePath;
     QString computerPath;
@@ -128,6 +129,7 @@ private slots:
     void setSettingsToDefaults();
     void on_buttonRemoveSettings_pressed();
     void curveChanged(int);
+
 
     void changePage(int);
     void animationFinished();

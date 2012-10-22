@@ -21,6 +21,7 @@
 #include "mainwindow.h"
 #include "../classes/application.h"
 #include "ui_mainwindow.h"
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWindow)
 {
@@ -138,6 +139,13 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
 #endif
 
     connect(this->settingsWidget, SIGNAL(settingsChanged()), this, SLOT(changeToolBar()));
+
+    ui->checkboxHideAutomatically->setChecked(this->settingsWidget->hideAutomatically);
+
+    connect(this->ui->checkboxHideAutomatically,SIGNAL(clicked(bool)),this,SLOT(setHideAutomatically(bool)));
+
+
+
     this->settingsWidget->clearSettings = false;
 
     this->fillLanguages();
@@ -146,7 +154,19 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
         this->updateApp.checkUpdates();
 
 //    this->setWindowTitle("QtADB " + QString::number(this->height()) + "x" + QString::number(this->width()));
+
+    windowHideTimer = new QTimer(this);
+    windowHideTimer->setSingleShot(true);
+    connect(windowHideTimer,SIGNAL(timeout()),this,SLOT(windowDisappearedTimeout()));
+
+
+    if (this->settingsWidget->hideAutomatically)
+    {
+        windowHideTimer->start(5000);
+    }
 }
+
+
 #ifdef WIN7PROGRESS
 bool MainWindow::winEvent(MSG *message, long *result)
 {
@@ -257,18 +277,19 @@ void MainWindow::connectWifi()
 
 bool MainWindow::eventFilter(QObject *object, QEvent *event)
 {
-    Q_UNUSED(object);
-    Q_UNUSED(event);
+    if (this->windowState() & Qt::WindowMinimized)
+    {
+        qDebug()<<"Window has been minimised";
+    }
 
-//    if (event->type() == QEvent::FocusIn)
-//    {
-//        if (object == ui->leftTableWidget)
-//            rightTableWidgetActivated();
+    /*if (event->type() == QEvent::W)
+    {
+            event->ignore();
+            minimized();
+            return true;
+    }*/
 
-//        else if (object == ui->rightTableWidget)
-//            leftTableWidgetActivated();
-//    }
-    return false;
+    return QMainWindow::eventFilter(object, event);
 }
 
 void MainWindow::fillLanguages()
@@ -1047,7 +1068,12 @@ void MainWindow::setProgressValue(int value, int max)
 
 void MainWindow::setProgressDisable()
 {
-        this->win7.setProgressState(win7.NoProgress);
+    this->win7.setProgressState(win7.NoProgress);
+}
+
+void MainWindow::setHideAutomatically(bool checked)
+{
+    this->settingsWidget->hideAutomatically = checked;
 }
 
 void MainWindow::donateMessage()
@@ -1109,4 +1135,18 @@ void MainWindow::showMainWindow()
     this->setWindowState(this->windowState() & (~Qt::WindowMinimized | Qt::WindowActive));
     this->setFocus();
     this->activateWindow();
+}
+
+void MainWindow::windowDisappearedTimeout()
+{
+    this->hide();
+}
+
+void MainWindow::minimized()
+{
+
+    if (this->settingsWidget->hideAutomatically)
+    {
+        this->hide();
+    }
 }

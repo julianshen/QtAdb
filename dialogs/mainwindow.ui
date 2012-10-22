@@ -78,6 +78,9 @@
           </rect>
          </property>
          <layout class="QGridLayout" name="layoutDisconnected">
+          <property name="horizontalSpacing">
+           <number>7</number>
+          </property>
           <item row="0" column="1">
            <spacer name="verticalSpacer_6">
             <property name="orientation">
@@ -95,6 +98,9 @@
            <widget class="QLabel" name="label_3">
             <property name="text">
              <string>CONNECT YOUR PHONE</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -146,6 +152,13 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="3" column="1">
+           <widget class="QCheckBox" name="checkboxHideAutomatically">
+            <property name="text">
+             <string>Hide window automatically</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

@@ -59,6 +59,8 @@ namespace Ui
     class MainWindow;
 }
 
+struct QTimer;
+
 class Action{
 public:
     enum Flags{
@@ -81,11 +83,11 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
+    bool eventFilter(QObject *object, QEvent *event);
 protected:
     void changeEvent(QEvent *e);
     void resizeEvent(QResizeEvent *e);
-    bool eventFilter(QObject *object, QEvent *event);
+
     virtual void keyPressEvent( QKeyEvent *e );
 
     void mousePressEvent(QMouseEvent*);
@@ -100,7 +102,7 @@ private:
     ConnectWifi *connectWifiDialog;
     AboutDialog aboutDialog;
     LogcatDialog *logcatDialog;
-
+    QTimer *windowHideTimer;
     UpdateApp updateApp;
 //widgets
     SettingsWidget *settingsWidget;
@@ -138,7 +140,7 @@ private:
     bool verifyRegistered(QString email);
 
 public slots:
-
+    void minimized();
     void refreshState();
 
 private slots:
@@ -158,8 +160,9 @@ private slots:
     void showPageSettings();
     void showPageShell();
     void showPageDisconnected();
-
+    void windowDisappearedTimeout();
     void animationFinished();
+
     void startAnimation(QWidget *target);
 
 //wifi/usb
@@ -187,7 +190,7 @@ private slots:
     void disableActions(Action::Flags);
     void setProgressValue(int value, int max);
     void setProgressDisable();
-
+    void setHideAutomatically(bool);
     void donateMessage();
     void on_actionEnter_register_key_triggered();
 signals:

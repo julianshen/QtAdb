@@ -301,6 +301,7 @@ void SettingsWidget::saveSettings()
     settings->setValue("shellFontColor", this->ui->shellLabelCurrentFont->palette().background().color());
     settings->setValue("sdFolder", this->ui->editSdExt->text());
     settings->setValue("showCopyConfirmation",ui->checkBoxShowCopyConfirmation->isChecked());
+    settings->setValue("hideAutomatically",this->hideAutomatically);
     int columns = this->appsColumnModel->rowCount(QModelIndex());
     QStringList columnsList;
     for (int i=0; i<columns; i++)
@@ -430,6 +431,7 @@ void SettingsWidget::getSettings()
     this->shellFontColor = settings->value("shellFontColor", Qt::black).value<QColor>();
 
     this->windowGeometry = settings->value("windowGeometry").toByteArray();
+    this->hideAutomatically = settings->value("hideAutomatically").toBool();
 
 //    this->phonePath = settings->value("phonePath", "/").toString();
 //    this->computerPath = settings->value("computerPath", "/").toString();
