@@ -431,7 +431,7 @@ void SettingsWidget::getSettings()
     this->shellFontColor = settings->value("shellFontColor", Qt::black).value<QColor>();
 
     this->windowGeometry = settings->value("windowGeometry").toByteArray();
-    this->hideAutomatically = settings->value("hideAutomatically").toBool();
+    this->hideAutomatically = settings->value("hideAutomatically",false).toBool();
 
 //    this->phonePath = settings->value("phonePath", "/").toString();
 //    this->computerPath = settings->value("computerPath", "/").toString();
