@@ -428,7 +428,7 @@ void MainWindow::phoneConnectionChanged(int state)
         if (this->shownAutomatically)
         {
             this->hide();
-        }else if (this->settingsWidget->hideAutomatically)
+        }else if (this->settingsWidget->hideAutomatically && this->isVisible())
         {
             windowHideTimer->start(5000);
         }
@@ -1077,6 +1077,12 @@ void MainWindow::setProgressDisable()
 void MainWindow::setHideAutomatically(bool checked)
 {
     this->settingsWidget->hideAutomatically = checked;
+
+    if (checked == false && this->windowHideTimer->isActive())
+    {
+        // cancel the hide timer.
+        this->windowHideTimer->stop();
+    }
 }
 
 void MainWindow::donateMessage()
@@ -1142,7 +1148,10 @@ void MainWindow::showMainWindow()
 
 void MainWindow::windowDisappearedTimeout()
 {
-    this->hide();
+    if (this->currentWidget==ui->pageDisconnected && this->isActiveWindow())
+    {
+        this->hide();
+    }
 }
 
 void MainWindow::minimized()
