@@ -428,6 +428,9 @@ void MainWindow::phoneConnectionChanged(int state)
         if (this->shownAutomatically)
         {
             this->hide();
+        }else if (this->settingsWidget->hideAutomatically)
+        {
+            windowHideTimer->start(5000);
         }
     }
     else if (state == DEVICE)
@@ -860,7 +863,7 @@ void MainWindow::showPageShell()
     }
 
 
-this->settingsWidget->changeFont();
+    this->settingsWidget->changeFont();
     this->setButtonDown(7);
 
     this->startAnimation(this->shellTabWidget);
