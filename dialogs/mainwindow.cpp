@@ -150,7 +150,7 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
 
     this->fillLanguages();
     this->showNoUpdates = false;
-    if (this->settingsWidget->checkForUpdatesOnStart)
+    if (this->settingsWidget->checkForUpdatesOnStart && this->settingsWidget->lastUpdateCheck.addDays(10) < QDate::currentDate())
         this->updateApp.checkUpdates();
 
 //    this->setWindowTitle("QtADB " + QString::number(this->height()) + "x" + QString::number(this->width()));
@@ -943,6 +943,8 @@ void MainWindow::updatesCheckFinished(bool gotUpdate, QString oldVersion, QStrin
 {
     if (gotUpdate)
     {
+        this->settingsWidget->lastUpdateCheck = QDate::currentDate();
+
         QMessageBox *msgBox = new QMessageBox(QMessageBox::Information, tr("New updates"), tr("New update is available\n")
                                               + tr("Your version: ") + oldVersion + tr("\nLatest version: ") + newVersion);
         QPushButton *getUpdatesMsg = msgBox->addButton(tr("Download"), QMessageBox::AcceptRole);
@@ -964,11 +966,17 @@ void MainWindow::updatesCheckFinished(bool gotUpdate, QString oldVersion, QStrin
         {
             QMessageBox::critical(this, tr("error"), tr("There was problem while checking for updates"), QMessageBox::Ok);
         }
-        else if (this->showNoUpdates)
+        else
         {
-            QMessageBox::information(this, tr("No updates"), tr("Your version is up to date\n")
-                                 + tr("Your version: ") + oldVersion + tr("\nLatest version: ") + newVersion, QMessageBox::Ok);
+            if (this->showNoUpdates)
+            {
+                QMessageBox::information(this, tr("No updates"), tr("Your version is up to date\n")
+                                     + tr("Your version: ") + oldVersion + tr("\nLatest version: ") + newVersion, QMessageBox::Ok);
+            }
+
+            this->settingsWidget->lastUpdateCheck = QDate::currentDate();
         }
+
         this->showNoUpdates = true;
     }
 }

@@ -27,7 +27,7 @@
 #include "../classes/models/apptablemodel.h"
 #include "../classes/models/backuptablemodel.h"
 #include "../classes/models/filetablemodel.h"
-
+#include <QDate>
 
 namespace Ui {
     class SettingsWidget;
@@ -86,6 +86,7 @@ public:
     QFont fontTables;
 
     QByteArray windowGeometry;
+    QDate lastUpdateCheck;
 
     void setSettings();
 

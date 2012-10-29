@@ -216,6 +216,7 @@ void SettingsWidget::setSettingsToDefaults()
     this->backupColumnList.clear();
     this->computerColumnList.clear();
     this->phoneColumnList.clear();
+    this->lastUpdateCheck = QDate::currentDate().addDays(-11);
 
     this->setSettings();
 }
@@ -302,6 +303,8 @@ void SettingsWidget::saveSettings()
     settings->setValue("sdFolder", this->ui->editSdExt->text());
     settings->setValue("showCopyConfirmation",ui->checkBoxShowCopyConfirmation->isChecked());
     settings->setValue("hideAutomatically",this->hideAutomatically);
+    settings->setValue("lastUpdateCheck",this->lastUpdateCheck);
+
     int columns = this->appsColumnModel->rowCount(QModelIndex());
     QStringList columnsList;
     for (int i=0; i<columns; i++)
@@ -432,6 +435,7 @@ void SettingsWidget::getSettings()
 
     this->windowGeometry = settings->value("windowGeometry").toByteArray();
     this->hideAutomatically = settings->value("hideAutomatically",false).toBool();
+    this->lastUpdateCheck = settings->value("lastUpdateCHeck",QDate::currentDate().addDays(-11)).toDate();
 
 //    this->phonePath = settings->value("phonePath", "/").toString();
 //    this->computerPath = settings->value("computerPath", "/").toString();
