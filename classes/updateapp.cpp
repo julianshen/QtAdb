@@ -88,7 +88,7 @@ void UpdateApp::gotWWW(QNetworkReply * pReply)
 
 void UpdateApp::proxyAuthenticationRequired ( const QNetworkProxy & proxy, QAuthenticator * authenticator )
 {
-    LoginDialog * login = new LoginDialog();
+    LoginDialog * login = new LoginDialog((QWidget *)QObject::parent());
 
     login->setMessage(proxy.hostName());
 

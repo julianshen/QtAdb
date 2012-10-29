@@ -103,7 +103,7 @@ private:
     AboutDialog aboutDialog;
     LogcatDialog *logcatDialog;
     QTimer *windowHideTimer;
-    UpdateApp updateApp;
+    UpdateApp *updateApp;
 //widgets
     SettingsWidget *settingsWidget;
     FileWidget *fileWidget;

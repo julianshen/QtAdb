@@ -23,7 +23,7 @@
 #include "ui_mainwindow.h"
 #include <QTimer>
 
-MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWindow),updateApp(new UpdateApp(parent))
 {
     ui->setupUi(this);
     int w, h;
@@ -125,7 +125,7 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
 
 //    //updates
     connect(this->ui->actionCheck_for_updates, SIGNAL(triggered()), this, SLOT(updatesCheck()));
-    connect(&this->updateApp, SIGNAL(updateState(bool, QString, QString)), this, SLOT(updatesCheckFinished(bool, QString, QString)));
+    connect(this->updateApp, SIGNAL(updateState(bool, QString, QString)), this, SLOT(updatesCheckFinished(bool, QString, QString)));
 
     connect(&this->animation.animation, SIGNAL(finished()), this, SLOT(animationFinished()));
 
@@ -151,7 +151,7 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
     this->fillLanguages();
     this->showNoUpdates = false;
     if (this->settingsWidget->checkForUpdatesOnStart && this->settingsWidget->lastUpdateCheck.addDays(10) < QDate::currentDate())
-        this->updateApp.checkUpdates();
+        this->updateApp->checkUpdates();
 
 //    this->setWindowTitle("QtADB " + QString::number(this->height()) + "x" + QString::number(this->width()));
 
@@ -936,7 +936,7 @@ void MainWindow::updatesCheck()
 {
     this->win7.setOverlayIcon(QIcon(":icons/info.png"), "desc");
     this->showNoUpdates = true;
-    this->updateApp.checkUpdates();
+    this->updateApp->checkUpdates();
 }
 
 void MainWindow::updatesCheckFinished(bool gotUpdate, QString oldVersion, QString newVersion)
