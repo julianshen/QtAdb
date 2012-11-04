@@ -85,7 +85,6 @@ public:
     ~MainWindow();
     bool eventFilter(QObject *object, QEvent *event);
 protected:
-    void changeEvent(QEvent *e);
     void resizeEvent(QResizeEvent *e);
 
     virtual void keyPressEvent( QKeyEvent *e );
@@ -136,13 +135,14 @@ private:
     QToolButton * buttonPageInfo;
     QAction * actionPageInfo;
     bool shownAutomatically;
+    bool dontSwallowEvent;
     bool verifyKey(QString email,QString key);
     bool verifyRegistered(QString email);
 
 public slots:
     void minimized();
     void refreshState();
-
+    bool event(QEvent *event);
 private slots:
     void showMainWindow();
     void phoneConnectionChanged(int);
@@ -181,10 +181,11 @@ private slots:
     void showLogcat();
     void smsReceived(QString number, QString body);
     void smsResult(QString result);
+    void forceRecovery(bool);
 
     void systemTrayActivated(QSystemTrayIcon::ActivationReason);
 
-    void addButton(QIcon icon, QString textTr, QString text, const char * method, int flags);
+    void addButton(QIcon icon, QString textTr, QString text, const char * method, int flags, const char *checkableMethod = "");
     void changeToolBar();
     void setButtonDown(int number);
     void disableActions(Action::Flags);

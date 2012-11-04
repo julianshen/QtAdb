@@ -89,9 +89,9 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
 
     this->ui->toolBar->setMovable(false);
 
-    this->addButton(QIcon(":icons/files.png"), tr("Files", "files button"), "Files" , SLOT(showPageFiles()), Action::Device | Action::Recovery);
+    this->addButton(QIcon(":icons/files.png"), tr("Files", "files button"), "Files" , SLOT(showPageFiles()), Action::Device | Action::Recovery,SLOT(forceRecovery(bool)));
     this->addButton(QIcon(":icons/apps.png"), tr("Apps", "apps button"), "Apps", SLOT(showPageApps()), Action::Device | Action::Recovery);
-    this->addButton(QIcon(":icons/recovery.png"), tr("Recovery", "recovery button"), "Recovery", SLOT(showPageRecovery()), Action::Recovery);
+    this->addButton(QIcon(":icons/recovery.png"), tr("Recovery", "recovery button"), "Recovery", SLOT(showPageRecovery()), Action::Recovery,SLOT(forceRecovery(bool)));
     this->addButton(QIcon(":icons/fastboot.png"), tr("Fastboot", "fastbot button"), "Fastboot", SLOT(showPageFastboot()), Action::Fastboot);
     this->addButton(QIcon(":icons/info.png"), tr("Phone info", "phone info button"), "Phone info", SLOT(showPagePhoneInfo()), Action::Device | Action::Recovery | Action::Disconnected | Action::Fastboot);
     this->addButton(QIcon(":icons/screenshot.png"), tr("Screenshot", "screenshot button"), "Screenshot", SLOT(showPageScreenshot()), Action::Device | Action::Recovery);
@@ -159,7 +159,7 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWind
     windowHideTimer->setSingleShot(true);
     connect(windowHideTimer,SIGNAL(timeout()),this,SLOT(windowDisappearedTimeout()));
 
-
+    this->dontSwallowEvent = false;
     if (this->settingsWidget->hideAutomatically)
     {
         windowHideTimer->start(5000);
@@ -240,6 +240,24 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+bool MainWindow::event(QEvent *event)
+{
+    if (event->type()==QEvent::WindowStateChange && isMinimized() && this->settingsWidget->hideAutomatically)
+    {
+        if (this->dontSwallowEvent)
+        {
+            this->dontSwallowEvent = false;
+        }else
+        {
+            hide();
+            event->ignore();
+            return false;
+        }
+    }
+
+    return QMainWindow::event(event);
+}
+/*
 void MainWindow::changeEvent(QEvent *e)
 {
     QMainWindow::changeEvent(e);
@@ -260,7 +278,7 @@ void MainWindow::changeEvent(QEvent *e)
         break;
     }
 }
-
+*/
 
 void MainWindow::connectWifi()
 {
@@ -981,7 +999,7 @@ void MainWindow::updatesCheckFinished(bool gotUpdate, QString oldVersion, QStrin
     }
 }
 
-void MainWindow::addButton(QIcon icon, QString textTr, QString text, const char * method, int flags)
+void MainWindow::addButton(QIcon icon, QString textTr, QString text, const char * method, int flags, const char * checkableMethod)
 {
     QAction *act = new QAction(icon, textTr, this);
     this->ui->menu->addAction(act);
@@ -994,9 +1012,21 @@ void MainWindow::addButton(QIcon icon, QString textTr, QString text, const char 
     button->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
     connect(button, SIGNAL(clicked()), this, method);
+    if (checkableMethod[0]!= 0)
+    {
+        act->setCheckable(true);
+        connect(button, SIGNAL(toggled(bool)), this, method);
+    }
+
     QAction *action = this->ui->toolBar->addWidget(button);
+
+
     action->setVisible(false);
     Action akcja;
+    if (checkableMethod[0]!= 0)
+    {
+        action->setCheckable(true);
+    }
     akcja.actionMenu = act;
     akcja.actionToolBar = action;
     akcja.button = button;
@@ -1148,6 +1178,7 @@ void MainWindow::on_actionEnter_register_key_triggered()
 
 void MainWindow::showMainWindow()
 {
+    this->dontSwallowEvent = true;
     this->show();
     this->setWindowState(this->windowState() & (~Qt::WindowMinimized | Qt::WindowActive));
     this->setFocus();
@@ -1169,4 +1200,9 @@ void MainWindow::minimized()
     {
         this->hide();
     }
+}
+
+void MainWindow::forceRecovery(bool)
+{
+
 }
