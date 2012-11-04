@@ -450,8 +450,16 @@ void MainWindow::phoneConnectionChanged(int state)
         {
             windowHideTimer->start(5000);
         }
+
+        return;
     }
-    else if (state == DEVICE)
+
+    if (this->windowHideTimer->isActive())
+    {
+        this->windowHideTimer->stop();
+    }
+
+    if (state == DEVICE)
     {
         if (this->logcatDialog != NULL && this->logcatDialog->isVisible())
             this->logcatDialog->startLogcat();
@@ -1125,6 +1133,7 @@ void MainWindow::setHideAutomatically(bool checked)
 
 void MainWindow::donateMessage()
 {
+#ifndef QT_DECLARATIVE_DEBUG
     QSettings settings;
     QDate firstRun = settings.value("firstRun", QDate::currentDate()).toDate();
     int runCount = settings.value("runCount", 0).toInt();
@@ -1168,6 +1177,7 @@ void MainWindow::donateMessage()
             settings.setValue("runCount", runCount);
         }
     }
+#endif
 }
 
 void MainWindow::on_actionEnter_register_key_triggered()
