@@ -69,6 +69,7 @@ public:
     QString sdkPath;
     QString wlanIP;
     QString sdFolder;
+    QString shellApplication;
 
     int sortByColumn;
     int getAppInfo;

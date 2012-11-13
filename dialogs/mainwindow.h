@@ -142,7 +142,7 @@ private:
 public slots:
     void minimized();
     void refreshState();
-    bool event(QEvent *event);
+    void changeEvent(QEvent *event);
 private slots:
     void showMainWindow();
     void phoneConnectionChanged(int);

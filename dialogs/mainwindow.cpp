@@ -240,7 +240,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-bool MainWindow::event(QEvent *event)
+/*bool MainWindow::event(QEvent *event)
 {
     if (event->type()==QEvent::WindowStateChange && isMinimized() && this->settingsWidget->hideAutomatically)
     {
@@ -256,14 +256,14 @@ bool MainWindow::event(QEvent *event)
     }
 
     return QMainWindow::event(event);
-}
-/*
+}*/
+
 void MainWindow::changeEvent(QEvent *e)
 {
     QMainWindow::changeEvent(e);
     switch (e->type())
     {
-    case QEvent::LanguageChange:
+    /*case QEvent::LanguageChange:
         ui->retranslateUi(this);
         this->aboutDialog.retranslateUi(&(this->aboutDialog));
         if (this->logcatDialog != NULL)
@@ -273,12 +273,16 @@ void MainWindow::changeEvent(QEvent *e)
             akcje.at(i).actionMenu->setText(tr(akcje.at(i).text.toAscii()));
             akcje.at(i).button->setText(tr(akcje.at(i).text.toAscii()));
         }
+        break;*/
+    case QEvent::WindowStateChange:
+        if(isMinimized())
+                    this->hide();
         break;
     default:
         break;
     }
 }
-*/
+
 
 void MainWindow::connectWifi()
 {

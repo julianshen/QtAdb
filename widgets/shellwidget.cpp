@@ -56,7 +56,19 @@ ShellWidget::ShellWidget(QWidget *parent) :
 
     //qDebug()<<"MainWindow::showPageShell() - process shell is not running, starting...";
     this->process.setProcessChannelMode(QProcess::MergedChannels);
-    this->process.start("\""+sdk+"\""+"adb shell");
+    this->process.start("\""+sdk+"\""+"adb shell "+settings.value("shellApplication").toString());
+
+    if (this->process.error() == QProcess::FailedToStart && settings.value("shellApplication").toString() != "sh")
+    {
+        int fontweight = this->font().weight();
+        this->setFontWeight(QFont::Bold);
+        this->setTextColor(Qt::red);
+        this->append(settings.value("shellApplication").toString()+" could not be executed.  Falling back to 'sh'.\n");
+        this->setTextColor(this->fontColor);
+        this->setFontWeight(fontweight);
+
+        this->process.start("\""+sdk+"\""+"adb shell sh");
+    }
 
     connect(&this->process, SIGNAL(readyRead()), this, SLOT(readFromProcess()));
     connect(&this->process,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(processFinished(int,QProcess::ExitStatus)));
@@ -161,6 +173,7 @@ void ShellWidget::keyPressEvent(QKeyEvent *e)
         this->setTextCursor(this->cursor);
         this->cursorPosition = 0;
         this->insertedChars = 0;
+        qDebug() << this->command;
         executeCommand(this->command);
 
         if (this->command == "exit")

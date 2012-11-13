@@ -217,6 +217,7 @@ void SettingsWidget::setSettingsToDefaults()
     this->computerColumnList.clear();
     this->phoneColumnList.clear();
     this->lastUpdateCheck = QDate::currentDate().addDays(-11);
+    this->shellApplication = "sh";
 
     this->setSettings();
 }
@@ -304,6 +305,7 @@ void SettingsWidget::saveSettings()
     settings->setValue("showCopyConfirmation",ui->checkBoxShowCopyConfirmation->isChecked());
     settings->setValue("hideAutomatically",this->hideAutomatically);
     settings->setValue("lastUpdateCheck",this->lastUpdateCheck);
+    settings->setValue("shellApplication",this->ui->editDefaultShell->text());
 
     int columns = this->appsColumnModel->rowCount(QModelIndex());
     QStringList columnsList;
@@ -432,6 +434,7 @@ void SettingsWidget::getSettings()
 
     this->shellBackgroundColor = settings->value("shellBackgroundColor", Qt::white).value<QColor>();
     this->shellFontColor = settings->value("shellFontColor", Qt::black).value<QColor>();
+    this->shellApplication = settings->value("shellApplication","sh").toString();
 
     this->windowGeometry = settings->value("windowGeometry").toByteArray();
     this->hideAutomatically = settings->value("hideAutomatically",false).toBool();
@@ -534,6 +537,7 @@ void SettingsWidget::setSettings()
     this->ui->checkCyrketVer->setChecked(this->getCyrketVer);
     this->ui->checkColorShellFiles->setChecked(this->colorShellFiles);
     ui->checkBoxShowCopyConfirmation->setChecked(this->showCopyConfirmation);
+    this->ui->editDefaultShell->setText(this->shellApplication);
 
     this->ui->checkBoxEnableAnimations->setChecked(this->enableAnimations);
     ui->listWidgetCurvePicker->setCurrentRow(this->animationCurve);
