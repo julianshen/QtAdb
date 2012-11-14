@@ -196,17 +196,27 @@ MainWindow::~MainWindow()
 //        delete this->backupMenu;
 
 //    this->threadApps.terminate();
-    delete this->systemTray;
+    DELETE_IF_NOT_NULL(this->systemTray);
 
-    delete this->fileWidget;
+    DELETE_IF_NOT_NULL(this->fileWidget);
+
+    if (this->settingsWidget->killDemonOnExit)
+    {
+        QProcess *kill=new QProcess;
+        QSettings settings;
+        kill->start("\""+settings.value("sdkPath").toString()+"\"adb kill-server");
+        kill->waitForFinished(-1);
+        delete kill;
+    }
+
     if (!this->settingsWidget->clearSettings)
     {
         QSettings settings;
         settings.setValue("windowGeometry", saveGeometry());
         this->settingsWidget->saveSettings();
     }
-    if (this->settingsWidget != NULL)
-        delete this->settingsWidget;
+
+    DELETE_IF_NOT_NULL(this->settingsWidget);
 
 //    if (this->procesShell!=NULL)
 //    {
@@ -215,14 +225,7 @@ MainWindow::~MainWindow()
 //        delete this->procesShell;
 //    }
 
-    if (this->settingsWidget->killDemonOnExit)
-    {
-	QProcess *kill=new QProcess;
-	QSettings settings;
-	kill->start("\""+settings.value("sdkPath").toString()+"\"adb kill-server");
-	kill->waitForFinished(-1);
-	delete kill;
-    }
+
 //    delete this->phone;
 //    delete this->phoneLeft;
 //    delete this->computer;
@@ -237,7 +240,7 @@ MainWindow::~MainWindow()
 //    delete this->appWidget;
 //    delete this->recoveryWidget;
 
-    delete ui;
+    DELETE_IF_NOT_NULL(ui);
 }
 
 /*bool MainWindow::event(QEvent *event)
@@ -292,7 +295,7 @@ void MainWindow::connectWifi()
     connect->start("\"" + settings.value("sdkPath").toString() + "\"adb connect " + this->ipAddress + ":" + this->portNumber);
     connect->waitForFinished(2000);
     connect->terminate();
-    delete connect;
+    DELETE_IF_NOT_NULL(connect);
 }
 
 
@@ -371,7 +374,7 @@ void MainWindow::fillLanguages()
     }
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *e)
+void MainWindow::keyPressEvent(QKeyEvent *)
 {
 //    if (ui->stackedWidget->currentWidget()==ui->pageFiles)
 //    {
@@ -420,7 +423,7 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
 
 
 
-void MainWindow::mousePressEvent(QMouseEvent *event)
+void MainWindow::mousePressEvent(QMouseEvent *)
 {
 //    int width, height;
 //    if (event->button() == Qt::LeftButton)
@@ -1219,4 +1222,10 @@ void MainWindow::minimized()
 void MainWindow::forceRecovery(bool)
 {
 
+}
+
+
+void MainWindow::closeEvent(QCloseEvent *)
+{
+    return;
 }

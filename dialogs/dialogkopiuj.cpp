@@ -160,7 +160,7 @@ void dialogKopiuj::copied()
         this->close();
 }
 
-void dialogKopiuj::nextFile(QString fileName, QString sourcePath, QString targetPath, int fileSize, int counter)
+void dialogKopiuj::nextFile(QString fileName, QString sourcePath, QString targetPath, int fileSize, int )
 {
     qDebug()<<"Copy,nextFile() - START";
     QString pathFrom, pathTo;

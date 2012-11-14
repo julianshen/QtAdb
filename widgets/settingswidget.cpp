@@ -151,8 +151,8 @@ SettingsWidget::~SettingsWidget()
     //settings->setValue("sdkPath", this->sdkPath);
     //settings->setValue("wlanIP", this->wlanIP);
 
-    delete settings;
-    delete ui;
+    DELETE_IF_NOT_NULL(settings);
+    DELETE_IF_NOT_NULL(ui);
 }
 
 void SettingsWidget::changeEvent(QEvent *e)

@@ -332,23 +332,17 @@ FileWidget::~FileWidget()
     this->settings->phonePath = this->phone->getPath();
     this->settings->computerPath = this->computer->getPath();
 
-    delete this->phone;
-    delete this->phoneLeft;
-    delete this->computer;
-    if (this->computerMenu != NULL)
-        delete this->computerMenu;
-    if (this->dialog != NULL)
-        delete this->dialog;
-    if (this->phoneLeftMenu != NULL)
-        delete this->phoneLeftMenu;
-    if (this->phoneRightMenu != NULL)
-        delete this->phoneRightMenu;
-    if (this->appInfoDialog != NULL)
-        delete this->appInfoDialog;
-    if (this->appsDialog != NULL)
-        delete this->appsDialog;
+    DELETE_IF_NOT_NULL(this->phone);
+    DELETE_IF_NOT_NULL(this->phoneLeft);
+    DELETE_IF_NOT_NULL(this->computer);
+    DELETE_IF_NOT_NULL(this->computerMenu);
+    DELETE_IF_NOT_NULL(this->dialog);
+    DELETE_IF_NOT_NULL(this->phoneLeftMenu);
+    DELETE_IF_NOT_NULL(this->phoneRightMenu);
+    DELETE_IF_NOT_NULL(this->appInfoDialog);
+    DELETE_IF_NOT_NULL(this->appsDialog);
 
-    delete ui;
+    DELETE_IF_NOT_NULL(ui);
 }
 
 void FileWidget::changeEvent(QEvent *e)

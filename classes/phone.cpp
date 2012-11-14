@@ -110,6 +110,8 @@ Phone::~Phone()
 {
     if (this->connectionThread.isRunning())
         this->connectionThread.terminate();
+
+    codec = NULL;
 }
 
 bool Phone::cd(QString dir)

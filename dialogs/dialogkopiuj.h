@@ -109,7 +109,7 @@ private:
 public slots:
     void closeAfterFinished();
     void copied();
-    void nextFile(QString fileName, QString pathFrom, QString pathTo, int fileSize, int counter);
+    void nextFile(QString fileName, QString pathFrom, QString pathTo, int fileSize, int);
     void setProgressValue(int value);
 signals:
     void progressValue(int value, int max);

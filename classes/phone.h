@@ -34,6 +34,8 @@
 #include <QTextCodec>
 #include "./models/filetablemodel.h"
 
+#define DELETE_IF_NOT_NULL(x) if(x != NULL){delete x; x = NULL;}
+
 #define DISCONNECTED 0
 #define DEVICE 1
 #define RECOVERY 2
