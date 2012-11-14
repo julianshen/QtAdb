@@ -279,9 +279,10 @@ void MainWindow::changeEvent(QEvent *e)
         break;*/
     case QEvent::WindowStateChange:
         if(isMinimized())
-                    this->hide();
+                    QMainWindow::hide();
         break;
     default:
+        std::cout << "Event fired: " << e->type() << std::endl;
         break;
     }
 }

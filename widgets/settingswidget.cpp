@@ -438,7 +438,7 @@ void SettingsWidget::getSettings()
 
     this->windowGeometry = settings->value("windowGeometry").toByteArray();
     this->hideAutomatically = settings->value("hideAutomatically",false).toBool();
-    this->lastUpdateCheck = settings->value("lastUpdateCHeck",QDate::currentDate().addDays(-11)).toDate();
+    this->lastUpdateCheck = settings->value("lastUpdateCheck",QDate::currentDate().addDays(-11)).toDate();
 
 //    this->phonePath = settings->value("phonePath", "/").toString();
 //    this->computerPath = settings->value("computerPath", "/").toString();
