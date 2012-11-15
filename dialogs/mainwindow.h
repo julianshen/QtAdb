@@ -83,7 +83,7 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    bool eventFilter(QObject *object, QEvent *event);
+    //bool eventFilter(QObject *object, QEvent *event);
 protected:
     void resizeEvent(QResizeEvent *e);
 

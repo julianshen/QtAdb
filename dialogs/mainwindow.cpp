@@ -299,25 +299,6 @@ void MainWindow::connectWifi()
     DELETE_IF_NOT_NULL(connect);
 }
 
-
-
-bool MainWindow::eventFilter(QObject *object, QEvent *event)
-{
-    if (this->windowState() & Qt::WindowMinimized)
-    {
-        qDebug()<<"Window has been minimised";
-    }
-
-    /*if (event->type() == QEvent::W)
-    {
-            event->ignore();
-            minimized();
-            return true;
-    }*/
-
-    return QMainWindow::eventFilter(object, event);
-}
-
 void MainWindow::fillLanguages()
 {
 

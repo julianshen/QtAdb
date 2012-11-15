@@ -332,8 +332,9 @@ FileWidget::~FileWidget()
     this->settings->phonePath = this->phone->getPath();
     this->settings->computerPath = this->computer->getPath();
 
-    DELETE_IF_NOT_NULL(this->phone);
     DELETE_IF_NOT_NULL(this->phoneLeft);
+    DELETE_IF_NOT_NULL(this->phone);
+
     DELETE_IF_NOT_NULL(this->computer);
     DELETE_IF_NOT_NULL(this->computerMenu);
     DELETE_IF_NOT_NULL(this->dialog);
@@ -641,7 +642,7 @@ void FileWidget::computerDelete()
     this->leftDisplay();
 }
 
-void FileWidget::computerDisplay(QTableWidget *tableWidget)
+void FileWidget::computerDisplay(QTableWidget *)
 {
     QSettings settings;
     this->computerModel->clear();

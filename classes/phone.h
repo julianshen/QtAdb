@@ -32,6 +32,7 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QTextCodec>
+#include <iostream>
 #include "./models/filetablemodel.h"
 
 #define DELETE_IF_NOT_NULL(x) if(x != NULL){delete x; x = NULL;}
