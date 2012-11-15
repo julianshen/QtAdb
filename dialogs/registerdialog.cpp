@@ -33,7 +33,7 @@ RegisterDialog::RegisterDialog(QWidget *parent, QStringList accountList) :
 
 RegisterDialog::~RegisterDialog()
 {
-    delete ui;
+    DELETE_IF_NOT_NULL(ui);
 }
 
 bool isKeySaved(QString key)

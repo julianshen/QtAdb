@@ -22,6 +22,7 @@
 #define SCREENSHOTWIDGET_H
 
 #include <QtGui>
+#include "../classes/phone.h"
 #include "../threads/screenshotthread.h"
 
 namespace Ui {

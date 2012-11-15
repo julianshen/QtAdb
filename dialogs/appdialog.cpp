@@ -188,7 +188,7 @@ appDialog::appDialog(QList<App> appList, int operation, int mode) :
 
 appDialog::~appDialog()
 {
-    delete ui;
+    DELETE_IF_NOT_NULL(ui);
 }
 
 void appDialog::backup()
@@ -677,6 +677,6 @@ void ThreadUninstall::run()
             emit this->uninstalled(tr("SUCCESS"), "");
         }
     }
-    delete proces;
+    DELETE_IF_NOT_NULL(proces);
     emit this->uninstalled("finished", "");
 }

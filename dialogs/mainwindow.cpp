@@ -183,17 +183,17 @@ void MainWindow::resizeEvent(QResizeEvent * event)
 MainWindow::~MainWindow()
 {
 //    if (this->appInfoDialog != NULL)
-//        delete this->appInfoDialog;
+//        DELETE_IF_NOT_NULL(this->appInfoDialog);
 //    if (this->computerMenu != NULL)
-//        delete this->computerMenu;
+//        DELETE_IF_NOT_NULL(this->computerMenu);
 //    if (this->phoneLeftMenu != NULL)
-//        delete this->phoneLeftMenu;
+//        DELETE_IF_NOT_NULL(this->phoneLeftMenu);
 //    if (this->phoneRightMenu != NULL)
-//        delete this->phoneRightMenu;
+//        DELETE_IF_NOT_NULL(this->phoneRightMenu);
 //    if (this->appMenu != NULL)
-//        delete this->appMenu;
+//        DELETE_IF_NOT_NULL(this->appMenu);
 //    if (this->backupMenu != NULL)
-//        delete this->backupMenu;
+//        DELETE_IF_NOT_NULL(this->backupMenu);
 
 //    this->threadApps.terminate();
     DELETE_IF_NOT_NULL(this->systemTray);
@@ -206,7 +206,7 @@ MainWindow::~MainWindow()
         QSettings settings;
         kill->start("\""+settings.value("sdkPath").toString()+"\"adb kill-server");
         kill->waitForFinished(-1);
-        delete kill;
+        DELETE_IF_NOT_NULL(kill);
     }
 
     if (!this->settingsWidget->clearSettings)
@@ -222,23 +222,23 @@ MainWindow::~MainWindow()
 //    {
 //        //        disconnect(this->procesShell, SIGNAL(finished(int)), this, SLOT(shellFinished()));
 //        this->procesShell->close();
-//        delete this->procesShell;
+//        DELETE_IF_NOT_NULL(this->procesShell);
 //    }
 
 
-//    delete this->phone;
-//    delete this->phoneLeft;
-//    delete this->computer;
+//    DELETE_IF_NOT_NULL(this->phone);
+//    DELETE_IF_NOT_NULL(this->phoneLeft);
+//    DELETE_IF_NOT_NULL(this->computer);
 
 
-//    delete this->settingsWidget;
-//    delete this->fileWidget;
-//    delete this->shellWidget;
-//    delete this->screenshotWidget;
-//    delete this->phoneInfoWidget;
-//    delete this->messageWidget;
-//    delete this->appWidget;
-//    delete this->recoveryWidget;
+//    DELETE_IF_NOT_NULL(this->settingsWidget);
+//    DELETE_IF_NOT_NULL(this->fileWidget);
+//    DELETE_IF_NOT_NULL(this->shellWidget);
+//    DELETE_IF_NOT_NULL(this->screenshotWidget);
+//    DELETE_IF_NOT_NULL(this->phoneInfoWidget);
+//    DELETE_IF_NOT_NULL(this->messageWidget);
+//    DELETE_IF_NOT_NULL(this->appWidget);
+//    DELETE_IF_NOT_NULL(this->recoveryWidget);
 
     DELETE_IF_NOT_NULL(ui);
 }
@@ -578,13 +578,13 @@ void MainWindow::restartInWifi()
             connect->start("\"" + settings.value("sdkPath").toString() + "\"adb tcpip " + this->portNumber);
             connect->waitForFinished(2000);
             connect->terminate();
-            delete connect;
+            DELETE_IF_NOT_NULL(connect);
             QTimer::singleShot(2000, this, SLOT(connectWifi()));
         }
         else
             connectWifi();
     }
-    delete this->connectWifiDialog;
+    DELETE_IF_NOT_NULL(this->connectWifiDialog);
 }
 
 void MainWindow::restartInUsb()
@@ -595,7 +595,7 @@ void MainWindow::restartInUsb()
     connect->start("\"" + settings.value("sdkPath").toString() + "\"adb usb");
     connect->waitForFinished(2000);
     connect->terminate();
-    delete connect;
+    DELETE_IF_NOT_NULL(connect);
 }
 
 void MainWindow::setLanguageRes(QAction *action)
@@ -990,9 +990,9 @@ void MainWindow::updatesCheckFinished(bool gotUpdate, QString oldVersion, QStrin
         {
             QDesktopServices::openUrl ( QUrl("http://qtadb.wordpress.com/download/") );
         }
-        delete getUpdatesMsg;
-        delete closeMsg;
-        delete msgBox;
+        DELETE_IF_NOT_NULL(getUpdatesMsg);
+        DELETE_IF_NOT_NULL(closeMsg);
+        DELETE_IF_NOT_NULL(msgBox);
     }
     else
     {
@@ -1173,10 +1173,10 @@ void MainWindow::donateMessage()
             {
                 settings.setValue("donateMessageShow", false);
             }
-            delete donate;
-            delete remaindLater;
-            delete dontRemaind;
-            delete msgBox;
+            DELETE_IF_NOT_NULL(donate);
+            DELETE_IF_NOT_NULL(remaindLater);
+            DELETE_IF_NOT_NULL(dontRemaind);
+            DELETE_IF_NOT_NULL(msgBox);
         }
         else
         {

@@ -22,7 +22,7 @@ ShellTabWidget::ShellTabWidget(QWidget *parent) :
 
 ShellTabWidget::~ShellTabWidget()
 {
-    delete ui;
+    DELETE_IF_NOT_NULL(ui);
 }
 
 void ShellTabWidget::closeTab(int tab)

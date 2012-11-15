@@ -154,7 +154,7 @@ bool Phone::cd(QString dir)
     else
         this->setPath(oldPath+dir+"/");
 
-    delete phone;
+    DELETE_IF_NOT_NULL(phone);
     return true;
 }
 
@@ -221,7 +221,7 @@ QList<File> *Phone::getFileList()
     {
         qDebug()<<"Phone::getFileList() - "<<outputLine;
         phone->terminate();
-        delete phone;
+        DELETE_IF_NOT_NULL(phone);
         return NULL;
     }
 
@@ -368,8 +368,8 @@ QList<File> *Phone::getFileList()
     qDebug()<<"Phone::getFileList() - skonczylem analizowac pliki";
 
     phone->terminate();
-    delete provider;
-    delete phone;
+    DELETE_IF_NOT_NULL(provider);
+    DELETE_IF_NOT_NULL(phone);
     return fileList;
 }
 
@@ -410,7 +410,7 @@ QList<File> *Phone::getFileList(QString filter)
     if (outputLines.first().contains("No such file or directory")||outputLines.first().contains("cannot")||outputLines.first().contains("Not a directory"))
     {
         phone->terminate();
-        delete phone;
+        DELETE_IF_NOT_NULL(phone);
         return NULL;
     }
 
@@ -558,8 +558,8 @@ QList<File> *Phone::getFileList(QString filter)
     qDebug()<<"Phone::getFileList() - skonczylem analizowac pliki";
 
     phone->terminate();
-//    delete provider;
-    delete phone;
+//    DELETE_IF_NOT_NULL(provider);
+    DELETE_IF_NOT_NULL(phone);
     return fileList;
 }
 
@@ -595,7 +595,7 @@ FileList *Phone::getStaticFileList(QString path, QString sdk, bool hiddenFiles)
     {
         fileList->name.append("error");
         phone->terminate();
-        delete phone;
+        DELETE_IF_NOT_NULL(phone);
         return fileList;
     }
 
@@ -666,7 +666,7 @@ FileList *Phone::getStaticFileList(QString path, QString sdk, bool hiddenFiles)
     }
     qDebug()<<"Phone::getFileList() - . i .. usuniete, koncze funkcje";
     phone->terminate();
-    delete phone;
+    DELETE_IF_NOT_NULL(phone);
     return fileList;
 }
 
@@ -705,7 +705,7 @@ bool Phone::makeDir(QString newDir)
     QString outputLine=phone->readLine();
 
     phone->terminate();
-    delete phone;
+    DELETE_IF_NOT_NULL(phone);
 
     if (outputLine.contains(QRegExp("can.+t create directory")))
         return false;
@@ -814,7 +814,7 @@ bool Phone::remove(QString name)
     QString outputLine=phone->readLine();
 
     phone->terminate();
-    delete phone;
+    DELETE_IF_NOT_NULL(phone);
 
     if (outputLine.contains("cannot remove"))
         return false;
@@ -838,7 +838,7 @@ bool Phone::rename(QString oldName, QString newName)
     QString outputLine=phone->readLine();
 
     phone->terminate();
-    delete phone;
+    DELETE_IF_NOT_NULL(phone);
 
     if (outputLine.contains("cannot rename"))
         return false;
@@ -851,7 +851,7 @@ void Phone::adbPowerOff()
     reboot->start("\""+sdk+"\"adb shell shutdown");
     reboot->waitForFinished(-1);
     reboot->terminate();
-    delete reboot;
+    DELETE_IF_NOT_NULL(reboot);
 }
 
 void Phone::adbReboot()
@@ -860,7 +860,7 @@ void Phone::adbReboot()
     reboot->start("\""+sdk+"\"adb shell reboot");
     reboot->waitForFinished(-1);
     reboot->terminate();
-    delete reboot;
+    DELETE_IF_NOT_NULL(reboot);
 }
 
 void Phone::adbRebootBootloader()
@@ -869,7 +869,7 @@ void Phone::adbRebootBootloader()
     reboot->start("\""+sdk+"\"adb shell reboot bootloader");
     reboot->waitForFinished(-1);
     reboot->terminate();
-    delete reboot;
+    DELETE_IF_NOT_NULL(reboot);
 }
 
 void Phone::adbRebootRecovery()
@@ -878,7 +878,7 @@ void Phone::adbRebootRecovery()
     reboot->start("\""+sdk+"\"adb shell reboot recovery");
     reboot->waitForFinished(-1);
     reboot->terminate();
-    delete reboot;
+    DELETE_IF_NOT_NULL(reboot);
 }
 
 void Phone::fastbootPowerOff()
@@ -887,7 +887,7 @@ void Phone::fastbootPowerOff()
     reboot->start("\""+sdk+"\"fastboot oem powerdown");
     reboot->waitForFinished(-1);
     reboot->terminate();
-    delete reboot;
+    DELETE_IF_NOT_NULL(reboot);
     this->slotConnectionChanged(FASTBOOT, this->serialNumber);
 }
 
@@ -897,7 +897,7 @@ void Phone::fastbootReboot()
     reboot->start("\""+sdk+"\"fastboot reboot");
     reboot->waitForFinished(-1);
     reboot->terminate();
-    delete reboot;
+    DELETE_IF_NOT_NULL(reboot);
     this->slotConnectionChanged(FASTBOOT, this->serialNumber);
 }
 
@@ -907,7 +907,7 @@ void Phone::fastbootRebootBootloader()
     reboot->start("\""+sdk+"\"fastboot reboot-bootloader");
     reboot->waitForFinished(-1);
     reboot->terminate();
-    delete reboot;
+    DELETE_IF_NOT_NULL(reboot);
     this->slotConnectionChanged(FASTBOOT, this->serialNumber);
 }
 
@@ -926,7 +926,7 @@ QStringList Phone::getGoogleAccounts()
     proces->waitForFinished(-1);
     output = proces->readAll();
     qDebug()<<"Phone::getGoogleAccounts(): "<<output;
-    delete proces;
+    DELETE_IF_NOT_NULL(proces);
     if (output.contains("permission") && !output.contains("account"))//////////////////////////////zmeinic
     {
         operation = "\""+sdk+"\""+ "adb shell su -c 'busybox grep gmail-ls /data/system/sync/accounts.xml'";
@@ -934,7 +934,7 @@ QStringList Phone::getGoogleAccounts()
         proces->start(operation);
         proces->waitForFinished(-1);
         output = proces->readAll();
-        delete proces;
+        DELETE_IF_NOT_NULL(proces);
     }
 
     QStringList list = output.split("\n");
@@ -974,6 +974,6 @@ QString Phone::getIp()
     tmp.remove(QRegExp("\\s.*"));
 
     qDebug()<<"Phone::getIP(), gotIP:  "<<tmp;
-    delete proces;
+    DELETE_IF_NOT_NULL(proces);
     return tmp;
 }

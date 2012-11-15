@@ -23,7 +23,7 @@ void LoginDialog::Decline()
 
 LoginDialog::~LoginDialog()
 {
-    delete ui;
+    DELETE_IF_NOT_NULL(ui);
 }
 
 void LoginDialog::setMessage(const QString proxy, const QString type)

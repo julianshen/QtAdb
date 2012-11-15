@@ -21,6 +21,10 @@
 #ifndef UPDATEAPP_H
 #define UPDATEAPP_H
 
+#ifndef DELETE_IF_NOT_NULL
+#define DELETE_IF_NOT_NULL(x) if(x != NULL){delete x; x = NULL;}
+#endif
+
 #include <QObject>
 #include <QNetworkReply>
 #include <QNetworkProxyFactory>

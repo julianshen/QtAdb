@@ -76,7 +76,7 @@ QList<File> *Computer::getFileList()
 
         fileList->append(file);
     }
-    delete provider;
+    DELETE_IF_NOT_NULL(provider);
     return fileList;
 }
 
@@ -111,7 +111,7 @@ FileList *Computer::getFileList(QString filter)
             }
             fileList->type.append("file");
         }
-        delete provider;
+        DELETE_IF_NOT_NULL(provider);
         list.removeFirst();
     }
     if (fileList->name.length()==0)

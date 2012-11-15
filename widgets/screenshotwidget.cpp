@@ -44,7 +44,7 @@ ScreenshotWidget::ScreenshotWidget(QWidget *parent) :
 
 ScreenshotWidget::~ScreenshotWidget()
 {
-    delete ui;
+    DELETE_IF_NOT_NULL(ui);
 }
 
 void ScreenshotWidget::changeEvent(QEvent *e)

@@ -115,11 +115,9 @@ dialogKopiuj::dialogKopiuj(QWidget *parent, QList<App> *appList, QString sdk, in
 
 dialogKopiuj::~dialogKopiuj()
 {
-    if (this->threadProgress != NULL)
-        delete this->threadProgress;
-    if (this->threadCopy != NULL)
-        delete this->threadCopy;
-    delete ui;
+    DELETE_IF_NOT_NULL(this->threadProgress);
+    DELETE_IF_NOT_NULL(this->threadCopy);
+    DELETE_IF_NOT_NULL(ui);
 }
 
 void dialogKopiuj::closeEvent(QCloseEvent *event)
@@ -135,10 +133,8 @@ void dialogKopiuj::closeEvent(QCloseEvent *event)
             this->threadCopy->proces->kill();
             this->threadCopy->terminate();
             this->threadProgress->terminate();
-            delete this->threadCopy;
-            this->threadCopy = NULL;
-            delete this->threadProgress;
-            this->threadProgress = NULL;
+            DELETE_IF_NOT_NULL(this->threadCopy);
+            DELETE_IF_NOT_NULL(this->threadProgress);
             event->accept();
         }
     }
@@ -240,11 +236,11 @@ void ThreadCopy::run()
             proces->waitForFinished(-1);
             output = proces->readAll();
             qDebug()<<"Copy - "<<output;
-            delete proces;
+            DELETE_IF_NOT_NULL(proces);
         }
         emit this->copied();
 
-        delete this->fileList;
+        DELETE_IF_NOT_NULL(this->fileList);
     }
     else if (this->mode == dialogKopiuj::ComputerToPhone)
     {
@@ -286,11 +282,11 @@ void ThreadCopy::run()
             qDebug()<<"Copy - reading process";
             output = proces->readAll();
             qDebug()<<"Copy - "<<output;
-            delete proces;
+            DELETE_IF_NOT_NULL(proces);
         }
         emit this->copied();
 
-        delete this->fileList;
+        DELETE_IF_NOT_NULL(this->fileList);
     }
     else if (this->mode == dialogKopiuj::PhoneToPhone)
     {
@@ -308,6 +304,7 @@ void ThreadCopy::run()
             targetDir = this->targetPath+fileName;
             targetDir = targetDir.left(targetDir.lastIndexOf("/") + 1);
             emit this->nextFile(file.fileName, sourceDir, targetDir, fileSize, counter);
+
             if (fileName.contains("/"))
             {
                 proces->start("\""+sdk+"\""+"adb shell busybox mkdir \""+ codec->toUnicode(this->targetPath.toUtf8())
@@ -316,6 +313,7 @@ void ThreadCopy::run()
                 output = proces->readAll();
                 qDebug()<<"Copy - "<<output;
             }
+
             dialogKopiuj::fileRemove(codec->toUnicode(this->targetPath.toUtf8())+codec->toUnicode(fileName.toUtf8()), this->mode);
             command = "\""+sdk+"\""+"adb shell cp \""+codec->toUnicode(file.filePath.toUtf8())+"\" "+"\""+
                                codec->toUnicode(this->targetPath.toUtf8())+codec->toUnicode(fileName.toUtf8())+"\"";
@@ -324,11 +322,11 @@ void ThreadCopy::run()
             proces->waitForFinished(-1);
             output = proces->readAll();
             qDebug()<<"Copy - "<<output;
-            delete proces;
+            DELETE_IF_NOT_NULL(proces);
         }
         emit this->copied();
 
-        delete this->fileList;
+        DELETE_IF_NOT_NULL(this->fileList);
     }
     else if (this->mode == dialogKopiuj::AppsToComputer)
     {
@@ -359,10 +357,10 @@ void ThreadCopy::run()
             proces->waitForFinished(-1);
             output = proces->readAll();
             qDebug()<<"Copy - "<<output;
-            delete proces;
+            DELETE_IF_NOT_NULL(proces);
         }
         emit this->copied();
-        delete this->appList;
+        DELETE_IF_NOT_NULL(this->appList);
     }
 }
 
@@ -406,7 +404,7 @@ void ThreadProgress::run()
         }
     }
     qDebug()<<"Copy progress.run() - END";
-    delete proces;
+    DELETE_IF_NOT_NULL(proces);
 }
 
 QString dialogKopiuj::humanReadableSize(QString size)

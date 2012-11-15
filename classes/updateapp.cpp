@@ -99,7 +99,7 @@ void UpdateApp::proxyAuthenticationRequired ( const QNetworkProxy & proxy, QAuth
         authenticator->setUser(login->user());
     }
 
-    delete login;
+    DELETE_IF_NOT_NULL(login);
 }
 
 void UpdateApp::checkUpdates()

@@ -83,7 +83,7 @@ MessageWidget::MessageWidget(QWidget *parent, QString clientIP) :
 MessageWidget::~MessageWidget()
 {
 
-    delete ui;
+    DELETE_IF_NOT_NULL(ui);
 }
 
 void MessageWidget::changeEvent(QEvent *e)
@@ -158,7 +158,7 @@ void MessageWidget::smsRead(QString threadId, QString messageId, QString timesta
 
     this->messageModel.addMessage(Message(threadId, messageId, timestamp, number, read, toa, body, contactName));
     if (this->previousMessage != NULL)
-        delete this->previousMessage;
+        DELETE_IF_NOT_NULL(this->previousMessage);
     this->previousMessage=new Message(threadId,messageId,timestamp,number,read,toa,body,contactName);
 }
 
@@ -244,7 +244,7 @@ void MessageWidget::newConnection()
 
         socket->disconnectFromHost();
     }
-    delete socket;
+    DELETE_IF_NOT_NULL(socket);
 }
 
 void MessageWidget::sendToClient(QString message)
@@ -259,7 +259,7 @@ void MessageWidget::sendToClient(QString message)
     }
     else
         QMessageBox::warning(this,"connection problem", "connection to client failed", QMessageBox::Close);
-    delete socket;
+    DELETE_IF_NOT_NULL(socket);
 }
 
 void MessageWidget::connectToClient()
@@ -270,7 +270,7 @@ void MessageWidget::connectToClient()
     {
         QMessageBox::warning(this,"connection problem", "connection to client failed", QMessageBox::Close);
     }
-    delete socket;
+    DELETE_IF_NOT_NULL(socket);
 }
 
 void MessageWidget::on_pushButton_pressed()

@@ -44,14 +44,14 @@ bool FileWidget::unpack(QString inFile,QString outPath,QString fileToUnpack,QStr
     QFile * file = new QFile(inFile);
     if (!file->open(QIODevice::ReadOnly))
     {
-        delete file;
+        DELETE_IF_NOT_NULL(file);
         return false;
     }
     if (inFile.isEmpty() || outPath.isEmpty() || fileToUnpack.isEmpty() || outName.isEmpty())
     {
 //        file->remove();
         file->close();
-        delete file;
+        DELETE_IF_NOT_NULL(file);
         return false;
     }
     //ZIP end of central directory record
@@ -150,13 +150,13 @@ bool FileWidget::unpack(QString inFile,QString outPath,QString fileToUnpack,QStr
             }
 //            file->remove();
             file->close();
-            delete file;
+            DELETE_IF_NOT_NULL(file);
             return true;
         }
     }
 //    file->remove();
     file->close();
-    delete file;
+    DELETE_IF_NOT_NULL(file);
     return true;
 }
 
@@ -231,7 +231,7 @@ FileWidget::FileWidget(QWidget *parent, SettingsWidget *settings) :
         para.first = provider->icon(QFileInfo(para.second));
         this->ui->leftComboBox->addItem(para.first, para.second);
     }
-    delete provider;
+    DELETE_IF_NOT_NULL(provider);
     //ustawienia tabelek
 
 //    ui->leftTableWidget->installEventFilter(this);
@@ -604,7 +604,7 @@ void FileWidget::computerCopy()
     }
 
     if (this->dialog != NULL)
-        delete this->dialog;
+        DELETE_IF_NOT_NULL(this->dialog);
     this->dialog = new dialogKopiuj(this, filesToCopy, this->sdk, dialogKopiuj::ComputerToPhone, this->computer->getPath(), this->phone->getPath());
 
     if (this->alwaysCloseCopy)
@@ -673,13 +673,13 @@ void FileWidget::computerDisplay(QTableWidget *tableWidget)
                 appName.replace("<packageName>", app->packageName);
                 if (this->settings->showAppName)
                     tmpFile.fileName = appName;
-                delete app;
+                DELETE_IF_NOT_NULL(app);
                 app = NULL;
             }
         }
         this->computerModel->insertFile(0, tmpFile);
     }
-    delete fileList;
+    DELETE_IF_NOT_NULL(fileList);
     this->leftTableView->resizeColumnsToContents();
     this->leftTableView->resizeRowsToContents();
     int i=0;
@@ -714,7 +714,7 @@ QList<File> * FileWidget::computerFilesToCopy(QList<File> *fileList)
             {
                 fileList->append(tmpFiles->takeFirst());
             }
-            delete tmpFiles;
+            DELETE_IF_NOT_NULL(tmpFiles);
             tmpFiles = NULL;
             this->computer->cdUp();
             i--;
@@ -913,7 +913,7 @@ void FileWidget::leftDoubleClick()
                     App *app;
                     app = this->getAppInfo(file.filePath);
                     if (this->appInfoDialog != NULL)
-                        delete this->appInfoDialog;
+                        DELETE_IF_NOT_NULL(this->appInfoDialog);
                     this->appInfoDialog = new appInfo(this, app);
                     this->appInfoDialog->show();
                 }
@@ -1275,7 +1275,7 @@ void FileWidget::phoneCopy()
     }
 
     if (this->dialog != NULL)
-        delete this->dialog;
+        DELETE_IF_NOT_NULL(this->dialog);
     if (this->leftMode == "computer")
         this->dialog = new dialogKopiuj(this, filesToCopy, this->sdk, dialogKopiuj::PhoneToComputer,
                                         phoneTmp->getPath(), this->computer->getPath());
@@ -1381,7 +1381,7 @@ void FileWidget::phoneDisplay(QTableView *tableView)
         phoneTmpModel->insertFile(0, fileList->takeFirst());
     }
 
-    delete fileList;
+    DELETE_IF_NOT_NULL(fileList);
     tableView->resizeColumnsToContents();
     tableView->resizeRowsToContents();
     int i=0;
@@ -1436,7 +1436,7 @@ QList<File> *FileWidget::phoneFilesToCopy(QList<File> *fileList, Phone *phone)
             {
                 fileList->append(tmpFiles->takeFirst());
             }
-            delete tmpFiles;
+            DELETE_IF_NOT_NULL(tmpFiles);
             tmpFiles = NULL;
             phone->cdUp();
             i--;
@@ -1784,7 +1784,7 @@ void FileWidget::showAppInfo()
         {
             app = this->getAppInfo(fileName);
             if (this->appInfoDialog != NULL)
-                delete this->appInfoDialog;
+                DELETE_IF_NOT_NULL(this->appInfoDialog);
             this->appInfoDialog = new appInfo(this, app);
             this->appInfoDialog->show();
         }
@@ -1831,13 +1831,13 @@ void ThreadFind::run()
                 plik = fileList->takeFirst();
             else
                 continue;
-            delete fileList;
+            DELETE_IF_NOT_NULL(fileList);
             plik.fileName.prepend(phone.getPath());
             emit this->foundFile(plik);
         }
     } while (proces->bytesAvailable() > 0);
     emit this->finished();
-    delete proces;
+    DELETE_IF_NOT_NULL(proces);
 }
 
 void FileWidget::foundFile(File file)
@@ -1898,7 +1898,7 @@ void FileWidget::installAppFromComputer()
 //        return;
 
 //    if (this->appsDialog != NULL)
-//        delete this->appsDialog;
+//        DELETE_IF_NOT_NULL(this->appsDialog);
 //    this->appsDialog=new appDialog(this,selected, appDialog::Install, appDialog::None,this->phone);
 //    this->appsDialog->show();
 //    //    connect(this->appsDialog,SIGNAL(finished(int)),this,SLOT(showPageApps()));
@@ -1933,7 +1933,7 @@ void FileWidget::installAppFromComputer()
 //    int i=0;
 
     if (this->appsDialog != NULL)
-        delete this->appsDialog;
+        DELETE_IF_NOT_NULL(this->appsDialog);
     this->appsDialog=new appDialog(this,appList, appDialog::Install, appDialog::None);
     this->appsDialog->show();
 }
@@ -1962,12 +1962,12 @@ App * FileWidget::getAppInfo(QString filePath)
     app->appFileName = filePath;
     app->appFileName.replace("//", ";");
     app->appSize = QString::number(plik->size());
-    delete plik;
+    DELETE_IF_NOT_NULL(plik);
 
     qDebug()<<"Apps aapt - "<<temp;
     proces->close();
     proces->terminate();
-    delete proces;
+    DELETE_IF_NOT_NULL(proces);
     aaptLines=temp.split("\n");
     while (aaptLines.length()>0)
     {
@@ -2093,7 +2093,7 @@ void FileWidget::copySlotToComputer(QStringList list)
     }
 
     if (this->dialog != NULL)
-        delete this->dialog;
+        DELETE_IF_NOT_NULL(this->dialog);
         this->dialog = new dialogKopiuj(this, filesToCopy, this->sdk, dialogKopiuj::PhoneToComputer,
                                         this->phone->getPath(), this->computer->getPath());
 
@@ -2145,7 +2145,7 @@ void FileWidget::copySlotToPhone(QStringList list)
     }
 
     if (this->dialog != NULL)
-        delete this->dialog;
+        DELETE_IF_NOT_NULL(this->dialog);
     if (this->leftMode == "computer")
         this->dialog = new dialogKopiuj(this, filesToCopy, this->sdk, dialogKopiuj::ComputerToPhone,
                                         this->computer->getPath(), this->phone->getPath());
@@ -2197,7 +2197,7 @@ void FileWidget::copySlotToPhoneLeft(QStringList list)
     }
 
     if (this->dialog != NULL)
-        delete this->dialog;
+        DELETE_IF_NOT_NULL(this->dialog);
 
     this->dialog = new dialogKopiuj(this, filesToCopy, this->sdk, dialogKopiuj::PhoneToPhone,
                                     this->phone->getPath(), this->phoneLeft->getPath());

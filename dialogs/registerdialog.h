@@ -20,7 +20,7 @@
 
 #ifndef REGISTERDIALOG_H
 #define REGISTERDIALOG_H
-
+#include "../classes/phone.h"
 #include <QDialog>
 #include <QCryptographicHash>
 #include <QSettings>

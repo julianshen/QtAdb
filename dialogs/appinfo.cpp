@@ -116,10 +116,10 @@ appInfo::appInfo(App *app) :
 appInfo::~appInfo()
 {
     if (this->appsDialog != NULL)
-        delete this->appsDialog;
-    delete this->app;
-    delete this->reply;
-    delete ui;
+        DELETE_IF_NOT_NULL(this->appsDialog);
+    DELETE_IF_NOT_NULL(this->app);
+    DELETE_IF_NOT_NULL(this->reply);
+    DELETE_IF_NOT_NULL(ui);
 }
 
 void appInfo::install()
@@ -132,7 +132,7 @@ void appInfo::install()
         return;
 
     if (this->appsDialog != NULL)
-        delete this->appsDialog;
+        DELETE_IF_NOT_NULL(this->appsDialog);
     this->appsDialog=new appDialog(this,appList, this->reinstall ? appDialog::Reinstall : appDialog::Install, appDialog::None);
     this->appsDialog->show();
 }
@@ -177,8 +177,8 @@ QPixmap appInfo::getQR(QString packageName)
     QPixmap pix;
     pix.loadFromData(ba);
 
-    delete rep;
-    delete nac;
+    DELETE_IF_NOT_NULL(rep);
+    DELETE_IF_NOT_NULL(nac);
     return pix;
 }
 
@@ -205,8 +205,8 @@ QString appInfo::getCyrketVer(QString packageName)
         int end = ba.indexOf("<div", start);
         str = ba.mid(start, end-start);
     }
-    delete rep;
-    delete nac;
+    DELETE_IF_NOT_NULL(rep);
+    DELETE_IF_NOT_NULL(nac);
     return str;
 }
 

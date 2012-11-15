@@ -119,8 +119,8 @@ AppWidget::AppWidget(QWidget *parent) :
 
 AppWidget::~AppWidget()
 {
-    delete ui;
-    delete this->phone;
+    DELETE_IF_NOT_NULL(ui);
+    DELETE_IF_NOT_NULL(this->phone);
 }
 
 void AppWidget::changeEvent(QEvent *e)
@@ -172,7 +172,7 @@ void AppWidget::copyAppToPC()
                                                      "", QFileDialog::ShowDirsOnly);
 
     if (this->dialog != NULL)
-        delete this->dialog;
+        DELETE_IF_NOT_NULL(this->dialog);
     this->dialog = new dialogKopiuj(this, tmpList, this->sdk, dialogKopiuj::AppsToComputer, path);
     if (this->alwaysCloseCopy)
         this->dialog->closeAfterFinished();
@@ -623,9 +623,9 @@ void AppWidget::missingAapt()
         QDesktopServices::openUrl(QUrl("http://qtadb.wordpress.com/download/"));
         QDesktopServices::openUrl(QUrl("file:///"+this->sdk));
     }
-    delete closeMsg;
-    delete download;
-    delete msgBox;
+    DELETE_IF_NOT_NULL(closeMsg);
+    DELETE_IF_NOT_NULL(download);
+    DELETE_IF_NOT_NULL(msgBox);
 }
 
 void AppWidget::on_toolButtonBackup_pressed()
@@ -705,7 +705,7 @@ void AppWidget::on_toolButtonBackup_pressed()
         }
     }
     if (this->appsDialog != NULL)
-        delete this->appsDialog;
+        DELETE_IF_NOT_NULL(this->appsDialog);
     if (this->withApk)
     {
         if (this->withData)
@@ -744,7 +744,7 @@ void AppWidget::on_toolButtonInstall_pressed()
             appList.append(*app);
     }
     if (this->appsDialog != NULL)
-        delete this->appsDialog;
+        DELETE_IF_NOT_NULL(this->appsDialog);
     this->appsDialog=new appDialog(this,appList,appDialog::Install,appDialog::None);
     this->appsDialog->show();
     connect(this->appsDialog, SIGNAL(progressValue(int,int)), this, SIGNAL(progressValue(int,int)));
@@ -799,7 +799,7 @@ void AppWidget::on_toolButtonUninstall_pressed()
         return;
 
     if (this->appsDialog != NULL)
-        delete this->appsDialog;
+        DELETE_IF_NOT_NULL(this->appsDialog);
     this->appsDialog=new appDialog(this,appList,appDialog::Uninstall,appDialog::AppAndData);
 //    if (this->ui->comboBoxApps->currentIndex() == 2)
 //        this->appsDialog->system = true;
@@ -902,7 +902,7 @@ void AppWidget::on_toolButtonRestore_pressed()
         }
     }
     if (this->appsDialog != NULL)
-        delete this->appsDialog;
+        DELETE_IF_NOT_NULL(this->appsDialog);
     if (this->withApk)
     {
         if (this->withData)
@@ -1068,7 +1068,7 @@ void ThreadBackups::run()
         backupFound.appSize.remove(QRegExp("\\s+$"));
         emit this->gotBackup(backupFound);
     }
-    delete proces;
+    DELETE_IF_NOT_NULL(proces);
     emit this->gotAllApps(this);
 }
 
@@ -1089,7 +1089,7 @@ void ThreadApps::run()
         emit this->missingAapt();
         return;
     }
-    delete aapt;
+    DELETE_IF_NOT_NULL(aapt);
     if (this->systemApps)
     {
         proces.start("\"" + this->sdk + "\"adb shell busybox ls -l /system/app/*.apk");
@@ -1480,12 +1480,12 @@ App * AppWidget::getAppInfo(QString filePath)
     app->appFileName = filePath;
     app->appFileName.replace("//", ";");
     app->appSize = QString::number(plik->size());
-    delete plik;
+    DELETE_IF_NOT_NULL(plik);
 
     qDebug()<<"Apps aapt - "<<temp;
     proces->close();
     proces->terminate();
-    delete proces;
+    DELETE_IF_NOT_NULL(proces);
     aaptLines=temp.split("\n");
     while (aaptLines.length()>0)
     {
@@ -1557,14 +1557,14 @@ bool AppWidget::unpack(QString inFile,QString outPath,QString fileToUnpack,QStri
     QFile * file = new QFile(inFile);
     if (!file->open(QIODevice::ReadOnly))
     {
-        delete file;
+        DELETE_IF_NOT_NULL(file);
         return false;
     }
     if (inFile.isEmpty() || outPath.isEmpty() || fileToUnpack.isEmpty() || outName.isEmpty())
     {
 //        file->remove();
         file->close();
-        delete file;
+        DELETE_IF_NOT_NULL(file);
         return false;
     }
     //ZIP end of central directory record
@@ -1663,13 +1663,13 @@ bool AppWidget::unpack(QString inFile,QString outPath,QString fileToUnpack,QStri
             }
 //            file->remove();
             file->close();
-            delete file;
+            DELETE_IF_NOT_NULL(file);
             return true;
         }
     }
 //    file->remove();
     file->close();
-    delete file;
+    DELETE_IF_NOT_NULL(file);
     return true;
 }
 

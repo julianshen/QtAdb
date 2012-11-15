@@ -35,7 +35,7 @@
 
 //ContactWidget::~ContactWidget()
 //{
-//    delete ui;
+//    DELETE_IF_NOT_NULL(ui);
 //}
 
 //void ContactWidget::changeEvent(QEvent *e)
@@ -97,7 +97,7 @@
 
 //    if (tmp.contains("not found"))
 //    {
-//        delete proces;
+//        DELETE_IF_NOT_NULL(proces);
 ////        emit this->finished();
 //        return;
 //    }
@@ -135,6 +135,6 @@
 //        contactList.number_key.append(tmpList.takeFirst());
 //    }
 //    proces->close();
-//    delete proces;
+//    DELETE_IF_NOT_NULL(proces);
 //    emit this->finished(contactList);
 //}

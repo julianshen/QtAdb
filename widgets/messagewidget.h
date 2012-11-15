@@ -26,6 +26,7 @@
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
 
+#include "../classes/phone.h"
 #include "../classes/models/messagethreadmodel.h"
 #include "../classes/models/contactmodel.h"
 

@@ -383,7 +383,7 @@ void SettingsWidget::saveSettings()
         break;
     }
 
-    delete settings;
+    DELETE_IF_NOT_NULL(settings);
     emit this->settingsChanged();
 }
 
@@ -497,7 +497,7 @@ void SettingsWidget::getSettings()
         break;
     }
 
-    delete settings;
+    DELETE_IF_NOT_NULL(settings);
     this->setSettings();
     this->animation.setPrameters(this->animationDuration,this->animationDirection,this->animationCurve);
     if (!this->enableAnimations)

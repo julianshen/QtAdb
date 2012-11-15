@@ -2,7 +2,7 @@
 #define LOGINDIALOG_H
 
 #include <QDialog>
-
+#include "../classes/phone.h"
 namespace Ui {
 class LoginDialog;
 }

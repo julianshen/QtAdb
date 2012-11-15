@@ -69,7 +69,7 @@ PhoneInfoWidget::PhoneInfoWidget(QWidget *parent, QString serialNumber) :
 
 PhoneInfoWidget::~PhoneInfoWidget()
 {
-    delete ui;
+    DELETE_IF_NOT_NULL(ui);
 }
 
 void PhoneInfoWidget::changeEvent(QEvent *e)

@@ -76,7 +76,7 @@ RecoveryWidget::RecoveryWidget(QWidget *parent) :
     else
         this->ui->buttonClearBattery->setEnabled(true);
     process->terminate();
-    delete process;
+    DELETE_IF_NOT_NULL(process);
     process=new QProcess();
     process->start("\""+sdk+"\"adb shell ls /sbin/ums_toggle");
     process->waitForFinished(-1);
@@ -86,7 +86,7 @@ RecoveryWidget::RecoveryWidget(QWidget *parent) :
     else
         this->ui->buttonMountSD->setEnabled(true);
     process->terminate();
-    delete process;
+    DELETE_IF_NOT_NULL(process);
 
     process=new QProcess();
     process->start("\""+sdk+"\"adb shell ls /sbin/fix_permissions");
@@ -97,7 +97,7 @@ RecoveryWidget::RecoveryWidget(QWidget *parent) :
     else
         this->ui->buttonFixUID->setEnabled(true);
     process->terminate();
-    delete process;
+    DELETE_IF_NOT_NULL(process);
 
     this->ui->stackedRecovery->setCurrentWidget(this->ui->pageRecoveryStart);
     ui->pageWipeData->setLayout(ui->layoutWipeData);
@@ -123,7 +123,7 @@ RecoveryWidget::RecoveryWidget(QWidget *parent) :
 
 RecoveryWidget::~RecoveryWidget()
 {
-    delete ui;
+    DELETE_IF_NOT_NULL(ui);
 }
 
 void RecoveryWidget::changeEvent(QEvent *e)
@@ -188,7 +188,7 @@ void RecoveryWidget::flashZip()
     tmp.waitForFinished(-1);
     tmp.terminate();
 //    if (this->dialog != NULL)
-//        delete this->dialog;
+//        DELETE_IF_NOT_NULL(this->dialog);
 //    this->dialog = new dialogKopiuj(this, fileList, this->sdk, dialogKopiuj::ComputerToPhone, fInfo.absolutePath(), "/sdcard/");
 //    this->dialog=new dialogKopiuj(this,fileList,this->sdk,"computerToPhone",this->phone,NULL,this->computer);
 //    if (this->alwaysCloseCopy)
@@ -245,7 +245,7 @@ void RecoveryWidget::mountSDcard()
         QMessageBox::warning(this, tr("Error"), tmp, QMessageBox::Ok);
     }
     process->terminate();
-    delete process;
+    DELETE_IF_NOT_NULL(process);
 }
 
 void RecoveryWidget::nandroidBackup()
@@ -528,7 +528,7 @@ void RecoveryWidget::wipeBattery()
     process->waitForFinished(-1);
     process->terminate();
     output = process->readAll();
-    delete process;
+    DELETE_IF_NOT_NULL(process);
     QMessageBox::information(this, tr("Information"), output, QMessageBox::Ok);
 }
 

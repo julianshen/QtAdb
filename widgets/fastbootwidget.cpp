@@ -41,7 +41,7 @@ FastbootWidget::FastbootWidget(QWidget *parent,Phone *phone) :
 
 FastbootWidget::~FastbootWidget()
 {
-    delete ui;
+    DELETE_IF_NOT_NULL(ui);
 }
 
 //void FastbootWidget::changeEvent(QEvent *e)
@@ -78,7 +78,7 @@ void FastbootWidget::bootIMG()
         }
         else
             QMessageBox::warning(this, "Error!", "Operation cancelled!", QMessageBox::Ok);
-        delete process;
+        DELETE_IF_NOT_NULL(process);
     }
     else
     {
@@ -113,7 +113,7 @@ void FastbootWidget::flashSPL()
         }
         else
             QMessageBox::warning(this, tr("Error!"), tr("Operation cancelled!"), QMessageBox::Ok);
-        delete process;
+        DELETE_IF_NOT_NULL(process);
     }
     else
     {
@@ -148,7 +148,7 @@ void FastbootWidget::flashRadio()
         }
         else
             QMessageBox::warning(this, tr("Error!"), tr("Operation cancelled!"), QMessageBox::Ok);
-        delete process;
+        DELETE_IF_NOT_NULL(process);
     }
     else
     {
@@ -183,7 +183,7 @@ void FastbootWidget::flashRecovery()
         }
         else
             QMessageBox::warning(this, tr("Error!"), tr("Operation cancelled!"), QMessageBox::Ok);
-        delete process;
+        DELETE_IF_NOT_NULL(process);
     }
     else
     {
