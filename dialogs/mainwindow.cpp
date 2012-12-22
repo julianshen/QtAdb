@@ -277,10 +277,12 @@ void MainWindow::changeEvent(QEvent *e)
             akcje.at(i).button->setText(tr(akcje.at(i).text.toAscii()));
         }
         break;*/
+#ifndef Q_WS_WIN
     case QEvent::WindowStateChange:
         if(isMinimized())
                     QMainWindow::hide();
         break;
+#endif
     default:
         std::cout << "Event fired: " << e->type() << std::endl;
         break;
