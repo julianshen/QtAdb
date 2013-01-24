@@ -28,7 +28,7 @@ RegisterDialog::RegisterDialog(QWidget *parent, QStringList accountList) :
     ui->setupUi(this);
     this->setLayout(ui->gridLayout);
     this->accountList = accountList;
-    this->registered = false;
+    this->registered = true;
 }
 
 RegisterDialog::~RegisterDialog()

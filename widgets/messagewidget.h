@@ -31,6 +31,8 @@
 #include "../classes/models/contactmodel.h"
 
 
+class FileWidget;
+
 namespace Ui {
     class MessageWidget;
 }
@@ -40,7 +42,7 @@ class MessageWidget : public QWidget
     Q_OBJECT
 
 public:
-    MessageWidget(QWidget *parent, QString clientIP);
+    MessageWidget(QWidget *parent, QString clientIP, FileWidget *fw);
     ~MessageWidget();
 
     QString clientIP;
@@ -64,7 +66,7 @@ private:
     int messageCount;
     void getSmsList();
     QTcpServer tcpServer;
-
+    FileWidget *fileWidget;
 
 
 private slots:
@@ -85,7 +87,7 @@ public slots:
     void smsResult(QString result);
     void markMessageAsRead(QString id);
     void markThreadAsRead(QString id);
-    void connectToClient();
+    bool connectToClient(bool retry = false);
     void newConnection();
     void sendToClient(QString message);
     QString getDateFromTimestamp(QString timestamp);

@@ -974,3 +974,19 @@ QString Phone::getIp()
     DELETE_IF_NOT_NULL(proces);
     return tmp;
 }
+
+bool Phone::pushApk(QString filename)
+{
+    QProcess *proces=new QProcess;
+    QSettings settings;
+    proces->start("\"" + settings.value("sdkPath").toString() + "\"adb install "+filename);
+    QString tmp;
+    proces->waitForFinished(-1);
+    tmp = proces->readAll();
+    std::cout <<"Phone::pushApk(): "<<tmp.toStdString();
+    int errorcode = proces->exitCode();
+    return proces->exitCode() == 0;
+    DELETE_IF_NOT_NULL(proces);
+
+
+}

@@ -19,12 +19,14 @@
 
 
 #include "messagewidget.h"
+#include "../widgets/filewidget.h"
 #include "ui_messagewidget.h"
 
 
-MessageWidget::MessageWidget(QWidget *parent, QString clientIP) :
+MessageWidget::MessageWidget(QWidget *parent, QString clientIP, FileWidget *fw) :
     QWidget(parent),
-    ui(new Ui::MessageWidget)
+    ui(new Ui::MessageWidget),
+    fileWidget(fw)
 {
     ui->setupUi(this);
 
@@ -258,23 +260,50 @@ void MessageWidget::sendToClient(QString message)
         socket->disconnectFromHost();
     }
     else
-        QMessageBox::warning(this,"connection problem", "connection to client failed", QMessageBox::Close);
+        QMessageBox::warning(this,tr("Connection Error"), tr("Could not connect to the QtADB application on your phone. Please ensure that the service is started."), QMessageBox::Close);
     DELETE_IF_NOT_NULL(socket);
 }
 
-void MessageWidget::connectToClient()
+bool MessageWidget::connectToClient(bool retry)
 {
     QTcpSocket *socket = new QTcpSocket();
     socket->connectToHost(this->clientIP,4444,QTcpSocket::ReadWrite);
+
     if (!socket->waitForConnected(2000))
     {
-        QMessageBox::warning(this,"connection problem", "connection to client failed", QMessageBox::Close);
+        if (retry)
+        {
+            QMessageBox::warning(this,tr("Connection Error"), tr("Could not connect to the QtADB application on your phone."), QMessageBox::Close);
+            return false;
+        }
+        else if (QMessageBox::warning(this,tr("Connection Error"), tr("Could not connect to the QtADB application on your phone.\nIf you have not installed it, press OK to side-load it."),QMessageBox::Ok, QMessageBox::Close) == QMessageBox::Ok)
+        {
+            // sideload.
+            QString filename("QtAdb.apk");
+            if (QFile::exists(filename)){
+                filename = QFileDialog::getOpenFileName(this,tr("Please chose the QtAdb APK file"),QString(),"QtADB Apk (*.apk)");
+            }
+
+            if (fileWidget->phone->pushApk(filename))
+            {
+                QMessageBox::information(this,tr("Please start QtAdb on your phone."),tr("Please start QtAdb on your phone and then click Ok."),QMessageBox::Ok);
+            }
+
+            connectToClient(true);
+        }else
+            return false;
     }
+
+    return true;
+
     DELETE_IF_NOT_NULL(socket);
 }
 
 void MessageWidget::on_pushButton_pressed()
 {
+    if (connectToClient()  == false)
+        return;
+
     clearModels();
     getContactList();
     getSmsList();

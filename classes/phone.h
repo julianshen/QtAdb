@@ -116,7 +116,7 @@ public slots:
     void fastbootReboot();
     void fastbootRebootBootloader();
     void fastbootPowerOff();
-
+    bool pushApk(QString filename);
 
 signals:
     void signalConnectionChanged(int connectionState);

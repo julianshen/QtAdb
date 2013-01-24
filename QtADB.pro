@@ -114,7 +114,8 @@ FORMS += ./dialogs/mainwindow.ui \
 RC_FILE = ikonka.rc
 RESOURCES += zasoby.qrc
 OTHER_FILES += otherFiles/changes.txt \
-    otherFiles/todo.txt
+    otherFiles/todo.txt \
+    otherFiles/qtadb.apk
 
 OTHER_FILES += \
     qml/messageView.qml \

@@ -749,7 +749,7 @@ void MainWindow::showPageMessages()
     //settings->setValue("computerPath", this->computerPath);
     qDebug()<<"MainWindow::showPageMessages()";
     QStringList accountList;
-    bool verified = false;
+    bool verified = true;
     QString ip = Phone::getIp();
 
     if (ip.isEmpty())
@@ -762,6 +762,9 @@ void MainWindow::showPageMessages()
     }
 
     QSettings settings;
+#ifdef QT_DEBUG
+    verified = true;
+#else
     QDate firstRun = settings.value("layout", QDate::currentDate()).toDate();
     if (firstRun == QDate::currentDate())
     {
@@ -783,6 +786,7 @@ void MainWindow::showPageMessages()
     {
         verified = true;
     }
+#endif
 
 
     if (verified)
@@ -790,7 +794,7 @@ void MainWindow::showPageMessages()
         qDebug()<<"MainWindow::showPageMessages(): user is verified";
         if (this->messageWidget == NULL)
         {
-            this->messageWidget = new MessageWidget(this,ip);
+            this->messageWidget = new MessageWidget(this,ip, this->fileWidget);
 
             this->settingsWidget->changeFont();
             ui->stackedWidget->addWidget(this->messageWidget);
