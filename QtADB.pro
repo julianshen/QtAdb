@@ -134,4 +134,8 @@ win32 {
 LIBS += libole32
 }
 
+mac {
+QMAKE_INFO_PLIST = QtADB.plist
+}
+
 #tutaj i w ecwin7.h
