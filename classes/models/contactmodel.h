@@ -52,9 +52,11 @@ public:
     bool clear();
     QString getNumber(QString name);
     QString getName(QString number);
+    QHash<int, QByteArray> roleNames();
 
 private:
     QList<Contact> contacts;
+    QHash<int, QByteArray> roles;
 };
 
 #endif // CONTACTMODEL_H

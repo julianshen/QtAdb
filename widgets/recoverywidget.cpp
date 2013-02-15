@@ -17,6 +17,8 @@
 *
 ************************************************************************/
 
+#include <QFileDialog>
+#include <QMessageBox>
 
 #include "recoverywidget.h"
 #include "ui_recoverywidget.h"

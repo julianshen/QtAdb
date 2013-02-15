@@ -22,6 +22,7 @@
 #define SHELLWIDGET_H
 
 #include <QtGui>
+#include <QTextEdit>
 
 class ShellWidget : public QTextEdit
 {

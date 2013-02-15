@@ -174,7 +174,6 @@ bool MessageThreadModel::clear()
 MessageThreadModel::MessageThreadModel(QObject *parent)
     : QAbstractListModel(parent)
 {
-    QHash<int, QByteArray> roles;
     roles[ThreadIdRole] = "threadId";
     roles[MessageCountRole] = "messageCount";
     roles[TimeStampRole] = "timeStamp";
@@ -182,7 +181,10 @@ MessageThreadModel::MessageThreadModel(QObject *parent)
     roles[LastBodyRole] = "lastBody";
     roles[ReadRole] = "read";
     roles[ContactNameRole] = "contactName";
-    setRoleNames(roles);
+}
+
+QHash<int, QByteArray> MessageThreadModel::roleNames() {
+    return roles;
 }
 
 void MessageThreadModel::addThread(const MessageThread &thread)

@@ -64,9 +64,11 @@ public:
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
     void addThread(const MessageThread &thread);
     bool clear();
+    QHash<int, QByteArray> roleNames();
 
 private:
     QList<MessageThread> threads;
+    QHash<int, QByteArray> roles;
 };
 
 #endif // MESSAGETHREADMODEL_H

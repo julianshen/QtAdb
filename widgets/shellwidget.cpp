@@ -44,10 +44,10 @@ ShellWidget::ShellWidget(QWidget *parent) :
     QSettings settings;
     this->sdk=settings.value("sdkPath").toString();
 
-    this->fontColor = settings.value("shellFontColor", Qt::black).value<QColor>();
+    this->fontColor = settings.value("shellFontColor", QVariant(QColor(Qt::black))).value<QColor>();
 
     QPalette palette = this->palette();
-    palette.setColor(QPalette::Base, settings.value("shellBackgroundColor", Qt::white).value<QColor>());
+    palette.setColor(QPalette::Base, settings.value("shellBackgroundColor", QVariant(QColor(Qt::white))).value<QColor>());
 
     this->setPalette(palette);
 
@@ -72,7 +72,7 @@ void ShellWidget::keyPressEvent(QKeyEvent *e)
     {
         if (e->key() == Qt::Key_C)
         {
-            this->process.write(QString(QChar(0x3)).toAscii());
+            this->process.write(QString(QChar(0x3)).toUtf8());
         }
         else if (e->key() == Qt::Key_Left)
         {
@@ -230,7 +230,7 @@ void ShellWidget::keyPressEvent(QKeyEvent *e)
     }
     else if(e->key() == Qt::Key_Escape)
     {
-        this->process.write(QString(QChar(0x3)).toAscii());
+        this->process.write(QString(QChar(0x3)).toUtf8());
     }
     else if (e->text().length()>0)
     {

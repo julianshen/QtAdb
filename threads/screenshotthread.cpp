@@ -140,7 +140,7 @@ void ThreadScreenshot::run()
         {
             tmp.setNum(serialNumber.length()+15, 16);
             tmp = tmp.rightJustified(4, '0');
-            this->socket->write(tmp.toAscii() + "host:transport:" + serialNumber.toAscii());
+            this->socket->write(tmp.toUtf8() + "host:transport:" + serialNumber.toUtf8());
             this->socket->waitForReadyRead(2000);
             data = this->socket->read(4);
             if (data == "OKAY")

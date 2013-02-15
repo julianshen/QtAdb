@@ -18,6 +18,7 @@
 ************************************************************************/
 
 
+#include <QHeaderView>
 #include "mytableview.h"
 
 MyTableView::MyTableView(QWidget *parent) :

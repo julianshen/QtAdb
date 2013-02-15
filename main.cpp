@@ -19,6 +19,9 @@
 
 
 #include <QtGui/QApplication>
+#include <QFileDialog>
+
+
 #include "./classes/application.h"
 #include "./dialogs/mainwindow.h"
 ////////////////////////////////////////
@@ -26,23 +29,23 @@
 #include <QFile>
 #include <QTextStream>
 
-void myMessageHandler(QtMsgType type, const char *msg)
+void myMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     QStringList args = qApp->arguments();
 
     QString txt;
     switch (type) {
     case QtDebugMsg:
-        txt = QString("Debug: %1").arg(msg);
+        txt = QString("Debug: %1 (%2:%3, %4)").arg(msg).arg(context.file).arg(context.line).arg(context.function);
         break;
     case QtWarningMsg:
-        txt = QString("Warning: %1").arg(msg);
+        txt = QString("Warning: %1 (%2:%3, %4)").arg(msg).arg(context.file).arg(context.line).arg(context.function);
         break;
     case QtCriticalMsg:
-        txt = QString("Critical: %1").arg(msg);
+        txt = QString("Critical: %1 (%2:%3, %4)").arg(msg).arg(context.file).arg(context.line).arg(context.function);
         break;
     case QtFatalMsg:
-        txt = QString("Fatal: %1").arg(msg);
+        txt = QString("Fatal: %1 (%2:%3, %4)").arg(msg).arg(context.file).arg(context.line).arg(context.function);
         abort();
     }
     if (args.contains("--debug"))
@@ -65,10 +68,11 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationVersion("0.8.1");
     QCoreApplication::setOrganizationDomain("http://qtadb.com");
     Application a(argc, argv);
-    qInstallMsgHandler(myMessageHandler);
+    qInstallMessageHandler(myMessageHandler);
+    //qInstallMsgHandler(myMessageHandler);
     a.loadTranslations(":/lang");
     a.loadTranslations(qApp->applicationDirPath());
-    a.setQuitOnLastWindowClosed(true);
+    a.connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
     qDebug()<<"app version: "<<QCoreApplication::applicationVersion();
 #ifdef Q_WS_WIN
     switch(QSysInfo::windowsVersion())

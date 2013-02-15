@@ -17,6 +17,7 @@
 *
 ************************************************************************/
 
+#include <QFileDialog>
 
 #include "screenshotwidget.h"
 #include "ui_screenshotwidget.h"

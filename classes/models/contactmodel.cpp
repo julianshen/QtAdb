@@ -80,11 +80,14 @@ bool ContactModel::clear()
 ContactModel::ContactModel(QObject *parent)
     : QAbstractListModel(parent)
 {
-    QHash<int, QByteArray> roles;
     roles[IdRole] = "threadId";
     roles[NumberRole] = "number";
     roles[NameRole] = "name";
-    setRoleNames(roles);
+}
+
+QHash<int, QByteArray> ContactModel::roleNames()
+{
+    return roles;
 }
 
 void ContactModel::addContact(const Contact &contact)

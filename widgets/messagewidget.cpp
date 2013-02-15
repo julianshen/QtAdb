@@ -17,6 +17,7 @@
 *
 ************************************************************************/
 
+#include <QMessageBox>
 
 #include "messagewidget.h"
 #include "ui_messagewidget.h"

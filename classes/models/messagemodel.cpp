@@ -116,7 +116,6 @@ bool MessageModel::clear()
 MessageModel::MessageModel(QObject *parent)
     : QAbstractListModel(parent)
 {
-    QHash<int, QByteArray> roles;
     roles[ThreadIdRole] = "threadId";
     roles[MessageIdRole] = "messageId";
     roles[TimeStampRole] = "timeStamp";
@@ -125,7 +124,10 @@ MessageModel::MessageModel(QObject *parent)
     roles[ReadRole] = "read";
     roles[ToaRole] = "toa";
     roles[ContactNameRole] = "contactName";
-    setRoleNames(roles);
+}
+
+QHash<int, QByteArray> MessageModel::roleNames() {
+    return roles;
 }
 
 void MessageModel::addMessage(const Message &message)

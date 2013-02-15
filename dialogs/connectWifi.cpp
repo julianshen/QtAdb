@@ -20,7 +20,7 @@
 
 #include "connectWifi.h"
 
-ConnectWifi::ConnectWifi( QWidget * parent, Qt::WFlags f)
+ConnectWifi::ConnectWifi( QWidget * parent, Qt::WindowFlags f)
         : QDialog(parent, f)
 {
         setupUi(this);

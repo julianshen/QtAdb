@@ -63,9 +63,11 @@ public:
     void addMessage(const Message &message);
     void markThreadAsRead(QString id);
     bool clear();
+    QHash<int, QByteArray> roleNames();
 
 private:
     QList<Message> messages;
+    QHash<int, QByteArray> roles;
 };
 
 

@@ -17,6 +17,9 @@
 *
 ************************************************************************/
 
+#include <QMenu>
+#include <QScrollBar>
+#include <QFileDialog>
 
 #include "logcatdialog.h"
 #include "ui_logcatdialog.h"

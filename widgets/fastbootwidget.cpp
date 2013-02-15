@@ -17,6 +17,8 @@
 *
 ************************************************************************/
 
+#include <QFileDialog>
+#include <QMessageBox>
 
 #include "fastbootwidget.h"
 #include "ui_fastbootwidget.h"

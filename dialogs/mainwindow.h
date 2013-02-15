@@ -21,6 +21,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 #include <QCryptographicHash>
+#include <QToolButton>
+#include <QMainWindow>
+#include <QSystemTrayIcon>
 
 #include "../classes/phone.h"
 #include "../classes/computer.h"

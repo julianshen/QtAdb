@@ -18,6 +18,7 @@
 ************************************************************************/
 
 
+#include <QWidget>
 #include "animation.h"
 
 Animation::Animation()
