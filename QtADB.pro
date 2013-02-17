@@ -114,7 +114,8 @@ FORMS += ./dialogs/mainwindow.ui \
 RC_FILE = ikonka.rc
 RESOURCES += zasoby.qrc
 OTHER_FILES += otherFiles/changes.txt \
-    otherFiles/todo.txt
+    otherFiles/todo.txt \
+    otherFiles/busybox
 
 OTHER_FILES += \
     qml/messageView.qml \
@@ -130,12 +131,17 @@ OTHER_FILES += \
     qml/messages/ContactList.qml \
     qml/messages/delegates/ThreadContextMenu.qml
 
+
 win32 {
 LIBS += libole32
 }
 
 mac {
 QMAKE_INFO_PLIST = QtADB.plist
+ICON = images/android.icns
+BUSYBOX.files = otherFiles/busybox
+BUSYBOX.path = Contents/Resources
+QMAKE_BUNDLE_DATA += BUSYBOX
 }
 
 #tutaj i w ecwin7.h
