@@ -50,6 +50,7 @@ private slots:
     void flashSPL();
     void flashRecovery();
     void flashRadio();
+    void flashZip();
     void bootIMG();
 };
 
