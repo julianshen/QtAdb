@@ -22,6 +22,7 @@
 #include "../classes/application.h"
 #include "ui_mainwindow.h"
 #include <QDesktopWidget>
+#include <QApplication>
 
 MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWindow)
 {
@@ -254,7 +255,67 @@ void MainWindow::connectWifi()
     delete connect;
 }
 
+bool MainWindow::checkBusyBox()
+{
+    QProcess *busybox = new QProcess;
+    QSettings settings;
+    busybox->setProcessChannelMode(QProcess::MergedChannels);
+    busybox->start("\"" + settings.value("sdkPath").toString() + "\"adb shell busybox");
+    busybox->waitForFinished(2000);
 
+    QString tmp = busybox->readAll();
+
+    busybox->terminate();
+
+    delete busybox;
+
+    if (tmp.contains("not found"))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+void MainWindow::installBusyBox()
+{
+    QProcess *install = new QProcess;
+    QSettings settings;
+
+    //remount
+    install->setProcessChannelMode(QProcess::MergedChannels);
+    install->start("\"" + settings.value("sdkPath").toString() + "\"adb remount");
+    install->waitForFinished(2000);
+
+    QString tmp = install->readAll();
+    if (tmp.contains("remount failed"))
+    {
+        //remount failed.
+        qDebug() << "Failed to remount system partition";
+        return;
+    }
+
+    install->terminate();
+    install->reset();
+
+    QDir dir(QApplication::applicationDirPath());
+    dir.cdUp();
+    dir.cd("Resources");
+
+    qDebug() << dir;
+
+    install->start("\"" + settings.value("sdkPath").toString() + "\"adb push " + dir.absoluteFilePath("busybox") + " /system/bin");
+    install->waitForFinished(2000);
+
+    qDebug() << "push busybox " << install->readAll();
+
+    install->terminate();
+    install->reset();
+
+    install->start("\"" + settings.value("sdkPath").toString() + "\"adb shell chmod 755 /system/bin/busybox");
+    install->waitForFinished(2000);
+    install->terminate();
+}
 
 bool MainWindow::eventFilter(QObject *object, QEvent *event)
 {
@@ -412,6 +473,16 @@ void MainWindow::phoneConnectionChanged(int state)
     }
     else if (state == DEVICE)
     {
+        qDebug() << "Device connected";
+
+#ifdef Q_OS_MAC
+        if(!checkBusyBox()) {
+            qDebug() << "BusyBox is not installed";
+
+            installBusyBox();
+        }
+#endif
+
         if (this->logcatDialog != NULL && this->logcatDialog->isVisible())
             this->logcatDialog->startLogcat();
 

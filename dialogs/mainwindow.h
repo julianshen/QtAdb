@@ -170,6 +170,11 @@ private slots:
     void restartInUsb();
     void connectWifi();
 
+    //busybox
+    bool checkBusyBox();
+    void installBusyBox();
+
+
     void setLanguageDir(QAction* action);
     void setLanguageRes(QAction* action);
     void fillLanguages();

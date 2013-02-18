@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     a.loadTranslations(qApp->applicationDirPath());
     a.connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
     qDebug()<<"app version: "<<QCoreApplication::applicationVersion();
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     switch(QSysInfo::windowsVersion())
     {
     case QSysInfo::WV_XP:qDebug()<<"system: Windows XP "<<QProcessEnvironment::systemEnvironment().value("PROCESSOR_ARCHITECTURE");
